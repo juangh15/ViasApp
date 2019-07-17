@@ -5,4 +5,4 @@
 #### Alejandro Mejía Osorio
 #### Andres Felipe Gaviria Lora
 #### Darwin Stiven Herrera Cartagena
-#### Juan Guillermo Sarrias
+#### Juan Guillermo Sarrias Escudero
