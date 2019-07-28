@@ -1,5 +1,7 @@
 package com.ViasApp.inmovil
 
-class Simulacion {
-  
+class Simulacion extends Runnable {
+  def run{
+    
+  }
 }
