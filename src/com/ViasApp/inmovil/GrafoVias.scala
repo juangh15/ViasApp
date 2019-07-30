@@ -1,4 +1,4 @@
-package inmovil
+package com.ViasApp.inmovil
 import com.ViasApp.movimiento._
 import scalax.collection.mutable.Graph
 import scalax.collection.edge.WLDiEdge
