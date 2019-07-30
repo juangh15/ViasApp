@@ -120,17 +120,24 @@ class Grafico {
   }
 
   def graficarVehiculos(vehiculos: Array[Vehiculo]) {
+    //Darwin´s code
+    
+    //Colecciones de "Arrays" para las series de puntos
     var dataset: XYSeriesCollection = new XYSeriesCollection()
     var dataset1: XYSeriesCollection = new XYSeriesCollection()
     var dataset2: XYSeriesCollection = new XYSeriesCollection()
     var dataset3: XYSeriesCollection = new XYSeriesCollection()
     var dataset4: XYSeriesCollection = new XYSeriesCollection()
 
+    //Series de los puntos de cada tipo de vehiculo
     var carros = new XYSeries(true)
     var buses = new XYSeries(true)
     var motos = new XYSeries(true)
     var camiones = new XYSeries(true)
     var motoTaxis = new XYSeries(true)
+    
+    
+    //filtro
     for (i <- vehiculos) {
       if (i.isInstanceOf[Carro]) {
         carros.add(i.pos.x, i.pos.y)
@@ -145,13 +152,14 @@ class Grafico {
       }
     }
 
-    //Personalizando
+    //agregando las series en cada coleccion
     dataset.addSeries(carros)
     dataset1.addSeries(buses)
     dataset2.addSeries(motos)
     dataset3.addSeries(camiones)
     dataset4.addSeries(motoTaxis)
-    //var renderer:XYLineAndShapeRenderer = new XYLineAndShapeRenderer()
+    
+    //creando cada Jfreechart que contiene un plot y unas letricas
     val chart = ChartFactory.createScatterPlot(
       "",
       "",
@@ -184,21 +192,31 @@ class Grafico {
       dataset4,
       org.jfree.chart.plot.PlotOrientation.HORIZONTAL, false, false, false)
 
+    
+    
+    //cada grafico de cada jfreechart
     val plot: XYPlot = chart.getXYPlot
     val plot1: XYPlot = chart1.getXYPlot
     val plot2: XYPlot = chart2.getXYPlot
     val plot3: XYPlot = chart3.getXYPlot
     val plot4: XYPlot = chart4.getXYPlot
 
+    
+    //estos son los estilos de cada tipo de vehiculo
     val renderer = plot.getRenderer
     val renderer1 = plot1.getRenderer
     val renderer2 = plot2.getRenderer
     val renderer3 = plot3.getRenderer
     val renderer4 = plot4.getRenderer
-
+    
+    
+    //Cambiando estilo para carros(solo carros
     renderer.setBaseShape(new Ellipse2D.Double(-4.0, -4.0, 12.0, 16.0))
     renderer.setSeriesVisibleInLegend(2, false)
-
+    
+    
+    //Alerta!
+    //creacion de ventana solo para ejemplos pero en el proyecto final se borra
     var ventana = new ChartFrame("ViasApp", chart)
     ventana.setVisible(true);
     ventana.setSize(800, 600);
