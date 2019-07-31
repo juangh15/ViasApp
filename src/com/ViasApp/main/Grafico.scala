@@ -125,11 +125,11 @@ class Grafico {
     var dataset: XYSeriesCollection = new XYSeriesCollection()
 
     //Series de los puntos de cada tipo de vehiculo
-    var carros = new XYSeries(true)
-    var buses = new XYSeries(true)
-    var motos = new XYSeries(true)
-    var camiones = new XYSeries(true)
-    var motoTaxis = new XYSeries(true)
+    var carros = new XYSeries("carros")
+    var buses = new XYSeries("buses")
+    var motos = new XYSeries("motos")
+    var camiones = new XYSeries("camiones")
+    var motoTaxis = new XYSeries("mototaxis")
     
     
     //filtro
