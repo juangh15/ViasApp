@@ -16,7 +16,6 @@ import org.jfree.chart.ChartFrame
 import java.awt.Label
 import org.jfree.chart.annotations.XYTextAnnotation
 import java.awt.Paint
-import java.awt.geom.Ellipse2D
 import org.jfree.chart.renderer.xy.XYItemRenderer
 import org.jfree.chart.renderer.xy.XYDotRenderer
 import java.awt.event.KeyEvent
@@ -197,11 +196,11 @@ class Grafico {
     ventana.setSize(800, 600);
     ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     //cuerpos marikas no son necesarios para el codigo
-    val cuerpocarro = new Ellipse2D.Double(1,2,0,0)
-    val cuerpomoto = new Rectangle2D.Double(4,1,0,0)
-    val cuerpobus = new RoundRectangle2D.Double(1,2.0,0,0,0.1,0.2)
-    val cuerpocamion = new Rectangle2D.Double(1,3,0,0)
-    val cuerpomototax = new Rectangle2D.Double(4.0,1,0,0)
+    val cuerpocarro = ShapeUtilities.createRegularCross(2, 3)
+    val cuerpomoto = ShapeUtilities.createDiamond(3)
+    val cuerpobus = ShapeUtilities.createRegularCross(3,2)
+    val cuerpocamion = ShapeUtilities.rotateShape(ShapeUtilities.createRegularCross(2, 3), 180, 0, 0)
+    val cuerpomototax = ShapeUtilities.createDownTriangle(4)
   }
 
 }
