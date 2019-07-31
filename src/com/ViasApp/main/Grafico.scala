@@ -118,7 +118,8 @@ class Grafico {
 
   }
 
-  def graficarVehiculos(vehiculos: Array[Vehiculo]) {
+
+  def graficarVehiculos(vehiculos: Array[Vehiculo]):XYSeriesCollection= {
     //Darwin´s code
     
     //Colecciones de "Arrays" para las series de puntos
@@ -154,53 +155,54 @@ class Grafico {
     dataset.addSeries(camiones)
     dataset.addSeries(motoTaxis)
     
-    //creando cada Jfreechart que contiene un plot y unas letricas
+    //creando cada Jfreechart que contiene un plot y unas letricas(que borramos)
     val chart = ChartFactory.createScatterPlot(
       "",
       "",
       "",
       dataset,
       org.jfree.chart.plot.PlotOrientation.HORIZONTAL, false, false, false)
-    //cada grafico de cada jfreechart
+      
+      
+      
+    //grafico 
+      
     val plot: XYPlot = chart.getXYPlot
     
     val renderer:XYItemRenderer = plot.getRenderer
     renderer.setBaseSeriesVisible(true)
+    renderer.setBaseSeriesVisibleInLegend(true)
     
+//    renderer.setSeriesShapesVisible(0,true)
+//    renderer.setSeriesLinesVisible(0,false)
     
     //estilos del carro
-    renderer.setSeriesShape(0, cuerpocarro)
+    renderer.setSeriesShape(0, ShapeUtilities.createRegularCross(2, 6))
     renderer.setSeriesPaint(0, Color.getHSBColor(243 , 85,84))
     //estilo del bus
-    renderer.setSeriesShape(1, cuerpobus)
-    renderer.setSeriesPaint(0, Color.getHSBColor(166,92,87))
+    renderer.setSeriesShape(1, ShapeUtilities.createDiamond(5))
+    renderer.setSeriesPaint(1, Color.getHSBColor(166,92,87))
     //estilo moto
-    renderer.setSeriesShape(2, cuerpomoto)
-    renderer.setSeriesPaint(0, Color.getHSBColor(359,100,100))
+    renderer.setSeriesShape(2, ShapeUtilities.createRegularCross(5,2))
+    renderer.setSeriesPaint(2, Color.getHSBColor(359,100,100))
     //estilo camion
-    renderer.setSeriesShape(3, cuerpocamion)
-    renderer.setSeriesPaint(0, Color.getHSBColor(117,100,64))
+    renderer.setSeriesShape(3, ShapeUtilities.rotateShape(ShapeUtilities.createRegularCross(2, 3), 180, 0, 0))
+    renderer.setSeriesPaint(2, Color.getHSBColor(117,100,64))
     //estilo mototaxi
-    renderer.setSeriesShape(4, cuerpomototax)
-    renderer.setSeriesPaint(0, Color.getHSBColor(59,83,100))
+    renderer.setSeriesShape(4, ShapeUtilities.createDownTriangle(4))
+    renderer.setSeriesPaint(2, Color.getHSBColor(59,83,100))
     
-
+    
     renderer.setBasePaint(Color.red)
+    plot.setBackgroundPaint(Color.WHITE) //color de fondo
+    plot.getDomainAxis.setTickLabelsVisible(false) //desaparecen los numeros y rectas
+    plot.getRangeAxis.setTickLabelsVisible(false)
+    plot.getDomainAxis.setTickMarksVisible(false) //desaparecen las marcas pequeñas
+    plot.getRangeAxis.setTickMarksVisible(false)
 
-    
-    
-    //Alerta!
-    //creacion de ventana solo para ejemplos pero en el proyecto final se borra
-    var ventana = new ChartFrame("ViasApp", chart)
-    ventana.setVisible(true);
-    ventana.setSize(800, 600);
-    ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-    //cuerpos marikas no son necesarios para el codigo
-    val cuerpocarro = ShapeUtilities.createRegularCross(2, 3)
-    val cuerpomoto = ShapeUtilities.createDiamond(3)
-    val cuerpobus = ShapeUtilities.createRegularCross(3,2)
-    val cuerpocamion = ShapeUtilities.rotateShape(ShapeUtilities.createRegularCross(2, 3), 180, 0, 0)
-    val cuerpomototax = ShapeUtilities.createDownTriangle(4)
+    dataset
+   
+  }
   }
 
 }
