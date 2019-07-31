@@ -124,10 +124,6 @@ class Grafico {
     
     //Colecciones de "Arrays" para las series de puntos
     var dataset: XYSeriesCollection = new XYSeriesCollection()
-    var dataset1: XYSeriesCollection = new XYSeriesCollection()
-    var dataset2: XYSeriesCollection = new XYSeriesCollection()
-    var dataset3: XYSeriesCollection = new XYSeriesCollection()
-    var dataset4: XYSeriesCollection = new XYSeriesCollection()
 
     //Series de los puntos de cada tipo de vehiculo
     var carros = new XYSeries(true)
@@ -154,10 +150,10 @@ class Grafico {
 
     //agregando las series en cada coleccion
     dataset.addSeries(carros)
-    dataset1.addSeries(buses)
-    dataset2.addSeries(motos)
-    dataset3.addSeries(camiones)
-    dataset4.addSeries(motoTaxis)
+    dataset.addSeries(buses)
+    dataset.addSeries(motos)
+    dataset.addSeries(camiones)
+    dataset.addSeries(motoTaxis)
     
     //creando cada Jfreechart que contiene un plot y unas letricas
     val chart = ChartFactory.createScatterPlot(
@@ -166,53 +162,32 @@ class Grafico {
       "",
       dataset,
       org.jfree.chart.plot.PlotOrientation.HORIZONTAL, false, false, false)
-    val chart1 = ChartFactory.createScatterPlot(
-      "",
-      "",
-      "",
-      dataset1,
-      org.jfree.chart.plot.PlotOrientation.HORIZONTAL, false, false, false)
-    val chart2 = ChartFactory.createScatterPlot(
-      "",
-      "",
-      "",
-      dataset2,
-      org.jfree.chart.plot.PlotOrientation.HORIZONTAL, false, false, false)
-    val chart3 = ChartFactory.createScatterPlot(
-      "",
-      "",
-      "",
-      dataset3,
-      org.jfree.chart.plot.PlotOrientation.HORIZONTAL, false, false, false)
-
-    val chart4 = ChartFactory.createScatterPlot(
-      "",
-      "",
-      "",
-      dataset4,
-      org.jfree.chart.plot.PlotOrientation.HORIZONTAL, false, false, false)
-
-    
-    
     //cada grafico de cada jfreechart
     val plot: XYPlot = chart.getXYPlot
-    val plot1: XYPlot = chart1.getXYPlot
-    val plot2: XYPlot = chart2.getXYPlot
-    val plot3: XYPlot = chart3.getXYPlot
-    val plot4: XYPlot = chart4.getXYPlot
+    
+    val renderer:XYItemRenderer = plot.getRenderer
+    renderer.setBaseSeriesVisible(true)
+    
+    
+    //estilos del carro
+    renderer.setSeriesShape(0, cuerpocarro)
+    renderer.setSeriesPaint(0, Color.getHSBColor(243 , 85,84))
+    //estilo del bus
+    renderer.setSeriesShape(1, cuerpobus)
+    renderer.setSeriesPaint(0, Color.getHSBColor(166,92,87))
+    //estilo moto
+    renderer.setSeriesShape(2, cuerpomoto)
+    renderer.setSeriesPaint(0, Color.getHSBColor(359,100,100))
+    //estilo camion
+    renderer.setSeriesShape(3, cuerpocamion)
+    renderer.setSeriesPaint(0, Color.getHSBColor(117,100,64))
+    //estilo mototaxi
+    renderer.setSeriesShape(4, cuerpomototax)
+    renderer.setSeriesPaint(0, Color.getHSBColor(59,83,100))
+    
 
-    
-    //estos son los estilos de cada tipo de vehiculo
-    val renderer = plot.getRenderer
-    val renderer1 = plot1.getRenderer
-    val renderer2 = plot2.getRenderer
-    val renderer3 = plot3.getRenderer
-    val renderer4 = plot4.getRenderer
-    
-    
-    //Cambiando estilo para carros(solo carros
-    renderer.setBaseShape(new Ellipse2D.Double(-4.0, -4.0, 12.0, 16.0))
-    renderer.setSeriesVisibleInLegend(2, false)
+    renderer.setBasePaint(Color.red)
+
     
     
     //Alerta!
@@ -220,7 +195,13 @@ class Grafico {
     var ventana = new ChartFrame("ViasApp", chart)
     ventana.setVisible(true);
     ventana.setSize(800, 600);
-    ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    //cuerpos marikas no son necesarios para el codigo
+    val cuerpocarro = new Ellipse2D.Double(1,2,0,0)
+    val cuerpomoto = new Rectangle2D.Double(4,1,0,0)
+    val cuerpobus = new RoundRectangle2D.Double(1,2.0,0,0,0.1,0.2)
+    val cuerpocamion = new Rectangle2D.Double(1,3,0,0)
+    val cuerpomototax = new Rectangle2D.Double(4.0,1,0,0)
   }
 
 }
