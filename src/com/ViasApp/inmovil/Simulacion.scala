@@ -89,7 +89,7 @@ object Simulacion  extends Runnable {
         control = true
       } 
     }    
-    vehiculos += new Moto(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextInt}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
+    vehiculos += new Moto(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextPrintableChar}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
   }
   for(i <- 1 to cantidadBuses){  
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
@@ -131,7 +131,7 @@ object Simulacion  extends Runnable {
         control = true
       } 
     }    
-    vehiculos += new MotoTaxi(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextInt}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
+    vehiculos += new MotoTaxi(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextPrintableChar}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
   }
   //Así hasta moto taxi
   
