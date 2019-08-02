@@ -81,6 +81,7 @@ object Simulacion  extends Runnable {
       }",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
       vehiculos += vehiculo
      camino = GrafoVias.trazarRuta(inicio, fin, g)
+     //Map[Vehiculo -> Queue] me equivoque al poner la vuelta del commit
      caminos(vehiculo)=camino
     }
     control=false
