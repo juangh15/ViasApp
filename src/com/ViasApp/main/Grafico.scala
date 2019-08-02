@@ -20,46 +20,48 @@ import org.jfree.chart.renderer.xy.XYItemRenderer
 import org.jfree.chart.renderer.xy.XYDotRenderer
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
+import org.jfree.util.ShapeUtilities
+import java.awt.geom.Rectangle2D
+import java.awt.geom.Ellipse2D
 
 class Grafico {
 
-  def graficarVias(vias: Array[Via]) {
+  def graficarVias(vias: Array[Via])= {
     //Guillermo's code
-
+    
     //Dataset
-    var dataset: XYSeriesCollection = new XYSeriesCollection()
+    val dataset: XYSeriesCollection = new XYSeriesCollection()
     //Render para personalizar
-    var renderer: XYLineAndShapeRenderer = new XYLineAndShapeRenderer()
-    //Contador para darle un id y personalizar cada via
-    var cont = 0
+    val renderer: XYLineAndShapeRenderer = new XYLineAndShapeRenderer()
     //Ancho de las vias, unica instancia y es el mism para todas
     val stroke = new BasicStroke(4f)
 
-    var conjunto_intersecciones = scalax.collection.mutable.ArraySet[Interseccion]()
-
+    val conjunto_intersecciones = scalax.collection.mutable.ArraySet[Interseccion]()
+    var cont:Int=0
     //Recorre las vias para graficarlas
-    vias.foreach(via_actual => {
-
+    
+    for(i <- vias){
       var viaserie = new XYSeries(cont)
 
-      viaserie.add(via_actual.origen.x, via_actual.origen.y)
-      viaserie.add(via_actual.fin.x, via_actual.fin.y)
+      viaserie.add(i.origen.x, i.origen.y)
+      viaserie.add(i.fin.x, i.fin.y)
 
-      conjunto_intersecciones.add(via_actual.origen)
-      conjunto_intersecciones.add(via_actual.fin)
-
-      dataset.addSeries(viaserie)
+      conjunto_intersecciones.add(i.origen)
+      conjunto_intersecciones.add(i.fin)
       renderer.setSeriesPaint(cont, Color.gray)
       renderer.setSeriesStroke(cont, stroke)
-
-      cont += 1
-
-    })
-
+      dataset.addSeries(viaserie)
+      cont+=1
+    }
+    
+    
+    
+    
+    
     conjunto_intersecciones.foreach(intersecccion_actual => {
 
       //Añade textos en las posiciones iniciales
-      var nuevo_texto = new XYTextAnnotation(intersecccion_actual.nombre, intersecccion_actual.x, intersecccion_actual.y)
+      val nuevo_texto = new XYTextAnnotation(intersecccion_actual.nombre, intersecccion_actual.x, intersecccion_actual.y)
       if (intersecccion_actual.x % 9 == 0) {
         nuevo_texto.setPaint(Color.YELLOW)
       } else if (intersecccion_actual.x % 7 == 0) {
@@ -74,63 +76,47 @@ class Grafico {
       renderer.addAnnotation(nuevo_texto)
     })
 
-    //crea el grafico con el dataset enviado
-
-    var xylinechart: JFreeChart = ChartFactory.createScatterPlot(
-      "",
-      "",
-      "",
-      dataset,
-      PlotOrientation.VERTICAL, false, false, false)
-
-    var plot: XYPlot = xylinechart.getXYPlot() //obtiene el grafico solo
-    //personaliza el grafico anterior
-    plot.setBackgroundPaint(Color.WHITE) //color de fondo
-    plot.getDomainAxis.setTickLabelsVisible(false) //desaparecen los numeros y rectas
-    plot.getRangeAxis.setTickLabelsVisible(false)
-    plot.getDomainAxis.setTickMarksVisible(false) //desaparecen las marcas pequeñas
-    plot.getRangeAxis.setTickMarksVisible(false)
-
-    //esto le manda el renderizado a la grafica
-    plot.setRenderer(renderer);
 
     //Se crea la ventana
-    var ventana = new ChartFrame("ViasApp", xylinechart);
+//    var ventana = new ChartFrame("ViasApp", xylinechart);
 
     //esto es para que el grafico reconozca las teclas presionadas
-    val teclas = new KeyListener() {
-      def keyPressed(e: KeyEvent) {
-        if (e.getKeyCode == KeyEvent.VK_F5)
-          println("f5")
-        //aqui creo que se llama al Simulacion.run y ya eso se queda en ciclo
-      }
-
-      def keyReleased(e: KeyEvent) {
-      }
-
-      def keyTyped(e: KeyEvent) {
-      }
-    }
-    ventana.addKeyListener(teclas)
-    ventana.setVisible(true);
-    ventana.setSize(800, 600);
-    ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+//    val teclas = new KeyListener() {
+//      def keyPressed(e: KeyEvent) {
+//        if (e.getKeyCode == KeyEvent.VK_F5)
+//          println("f5")
+//        //aqui creo que se llama al Simulacion.run y ya eso se queda en ciclo
+//      }
+//
+//      def keyReleased(e: KeyEvent) {
+//      }
+//
+//      def keyTyped(e: KeyEvent) {
+//      }
+//    }
+//    ventana.addKeyListener(teclas)
+    (dataset,renderer,vias.size-1)
   }
 
-
-  def graficarVehiculos(vehiculos: Array[Vehiculo]):XYSeriesCollection= {
+  def graficarVehiculos(vehiculos: Array[Vehiculo],vias:Array[Via]):Unit= {
     //Darwin´s code
     
     //Colecciones de "Arrays" para las series de puntos
-    var dataset: XYSeriesCollection = new XYSeriesCollection()
+    //val dataset: XYSeriesCollection = new XYSeriesCollection()
 
+    
+    
+    
+    val g=new Grafico
+    val (dataset,renderer,ultimo) =g.graficarVias(vias)
+    
+    
     //Series de los puntos de cada tipo de vehiculo
-    var carros = new XYSeries("carros")
-    var buses = new XYSeries("buses")
-    var motos = new XYSeries("motos")
-    var camiones = new XYSeries("camiones")
-    var motoTaxis = new XYSeries("mototaxis")
+    val carros = new XYSeries("carros")
+    val buses = new XYSeries("buses")
+    val motos = new XYSeries("motos")
+    val camiones = new XYSeries("camiones")
+    val motoTaxis = new XYSeries("mototax")
     
     
     //filtro
@@ -161,48 +147,54 @@ class Grafico {
       "",
       "",
       dataset,
-      org.jfree.chart.plot.PlotOrientation.HORIZONTAL, false, false, false)
-      
-      
-      
+      org.jfree.chart.plot.PlotOrientation.VERTICAL, false, false, false)
     //grafico 
       
     val plot: XYPlot = chart.getXYPlot
     
-    val renderer:XYItemRenderer = plot.getRenderer
-    renderer.setBaseSeriesVisible(true)
-    renderer.setBaseSeriesVisibleInLegend(true)
+    //Estilos para todos que luego se especifican para los carritos
+    renderer.setBaseLinesVisible(true)
+    renderer.setBaseShapesVisible(false)
+    for(r <- 1 to 5) {
+      renderer.setSeriesShapesVisible(ultimo+r,true) 
+      renderer.setSeriesLinesVisible(ultimo+r,false)
+    }
+
     
-//    renderer.setSeriesShapesVisible(0,true)
-//    renderer.setSeriesLinesVisible(0,false)
+    
     
     //estilos del carro
-    renderer.setSeriesShape(0, ShapeUtilities.createRegularCross(2, 6))
-    renderer.setSeriesPaint(0, Color.getHSBColor(243 , 85,84))
+    renderer.setSeriesShape(ultimo+1, ShapeUtilities.createRegularCross(2, 6))
+    renderer.setSeriesPaint(ultimo+1, Color.getHSBColor(243 , 85,84))
     //estilo del bus
-    renderer.setSeriesShape(1, ShapeUtilities.createDiamond(5))
-    renderer.setSeriesPaint(1, Color.getHSBColor(166,92,87))
+    renderer.setSeriesShape(ultimo+2, ShapeUtilities.createDiamond(5))
+    renderer.setSeriesPaint(ultimo+2, Color.BLACK)
     //estilo moto
-    renderer.setSeriesShape(2, ShapeUtilities.createRegularCross(5,2))
-    renderer.setSeriesPaint(2, Color.getHSBColor(359,100,100))
+    renderer.setSeriesShape(ultimo+3, ShapeUtilities.createRegularCross(5,2))
+    renderer.setSeriesPaint(ultimo+3, Color.getHSBColor(359,100,100))
     //estilo camion
-    renderer.setSeriesShape(3, ShapeUtilities.rotateShape(ShapeUtilities.createRegularCross(2, 3), 180, 0, 0))
-    renderer.setSeriesPaint(2, Color.getHSBColor(117,100,64))
+    renderer.setSeriesShape(ultimo+4, ShapeUtilities.rotateShape(ShapeUtilities.createRegularCross(2, 3), 180, 0, 0))
+    renderer.setSeriesPaint(ultimo+4, Color.getHSBColor(117,100,64))
     //estilo mototaxi
-    renderer.setSeriesShape(4, ShapeUtilities.createDownTriangle(4))
-    renderer.setSeriesPaint(2, Color.getHSBColor(59,83,100))
+    renderer.setSeriesShape(ultimo+5, ShapeUtilities.createDownTriangle(4))
+    renderer.setSeriesPaint(ultimo+5, Color.getHSBColor(59,83,100))
     
     
-    renderer.setBasePaint(Color.red)
     plot.setBackgroundPaint(Color.WHITE) //color de fondo
     plot.getDomainAxis.setTickLabelsVisible(false) //desaparecen los numeros y rectas
     plot.getRangeAxis.setTickLabelsVisible(false)
     plot.getDomainAxis.setTickMarksVisible(false) //desaparecen las marcas pequeñas
     plot.getRangeAxis.setTickMarksVisible(false)
-
-    dataset
-   
+    
+    
+    
+    //Esto manda los estilos
+    plot.setRenderer(renderer)
+    
+    
+    val frame = new ChartFrame("ViasApp",chart)
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    frame.pack()
+    frame.setVisible(true)
   }
-  }
-
 }
