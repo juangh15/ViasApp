@@ -2,6 +2,7 @@ package com.ViasApp.inmovil
 import com.ViasApp.movimiento._
 import scalax.collection.mutable.Graph
 import scalax.collection.edge.WLDiEdge
+import scala.collection.mutable.Queue
 
 object GrafoVias {
   
@@ -25,7 +26,7 @@ object GrafoVias {
     val n1: k.NodeT = nodo(inicio)
     val n2: k.NodeT = nodo(fin)
     val z = (n1) shortestPathTo (n2)
-    return z.get
+    scala.collection.mutable.Queue((z.get).nodes.toSeq: _*)
 
   }
 }
