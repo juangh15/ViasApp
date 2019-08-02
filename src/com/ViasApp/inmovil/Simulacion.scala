@@ -57,13 +57,14 @@ object Simulacion  extends Runnable {
   val limIndex = intersecciones.size - 1
   //Creación de los vehiculos
   var control = false
-  var inicio = _
+  var inicio:Interseccion = _
+  var fin:Interseccion = _
   //carros
   for(i <- 1 to cantidadCarros){  
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
     inicio = intersecciones(r.nextInt(limIndex))
     while (control == false) {
-      var fin = intersecciones(r.nextInt(limIndex))
+      fin = intersecciones(r.nextInt(limIndex))
       if (fin != inicio) {
         control = true
       } 
@@ -78,7 +79,7 @@ object Simulacion  extends Runnable {
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
     inicio = intersecciones(r.nextInt(limIndex))
     while (control == false) {
-      var fin = intersecciones(r.nextInt(limIndex))
+      fin = intersecciones(r.nextInt(limIndex))
       if (fin != inicio) {
         control = true
       } 
@@ -93,7 +94,7 @@ object Simulacion  extends Runnable {
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
     inicio = intersecciones(r.nextInt(limIndex))
     while (control == false) {
-      var fin = intersecciones(r.nextInt(limIndex))
+      fin = intersecciones(r.nextInt(limIndex))
       if (fin != inicio) {
         control = true
       } 
@@ -108,7 +109,7 @@ object Simulacion  extends Runnable {
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
     inicio = intersecciones(r.nextInt(limIndex))
     while (control == false) {
-      var fin = intersecciones(r.nextInt(limIndex))
+      fin = intersecciones(r.nextInt(limIndex))
       if (fin != inicio) {
         control = true
       } 
@@ -123,7 +124,7 @@ object Simulacion  extends Runnable {
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
     inicio = intersecciones(r.nextInt(limIndex))
     while (control == false) {
-      var fin = intersecciones(r.nextInt(limIndex))
+      fin = intersecciones(r.nextInt(limIndex))
       if (fin != inicio) {
         control = true
       } 
