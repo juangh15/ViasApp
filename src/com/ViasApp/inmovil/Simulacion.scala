@@ -4,6 +4,9 @@ import com.ViasApp.movimiento._
 import com.ViasApp.inmovil._
 import com.ViasApp.movil._
 import scala.util.Random
+import scalax.collection.mutable.Graph
+import scalax.collection.edge.WLDiEdge
+import scala.collection.mutable.{Queue,Map}
 
 object Simulacion  extends Runnable {
   
@@ -59,6 +62,7 @@ object Simulacion  extends Runnable {
   var control = false
   var inicio:Interseccion = _
   var fin:Interseccion = _
+  var vehiculo:Vehiculo=_
   for(j <- List(cantidadCarros,cantidadMotos,cantidadBuses,cantidadCamiones,cantidadMototaxis)){
    for(i <- 1 to j){  
       //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
@@ -69,12 +73,15 @@ object Simulacion  extends Runnable {
           control = true
         } 
       }
-      vehiculos += new Carro(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${j match {
+      vehiculo = new Carro(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${j match {
         case cantidadMotos => r.nextPrintableChar()
         case cantidadMototaxis => r.nextPrintableChar()
         case _ => r.nextInt()
       }
       }",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
+      vehiculos += vehiculo
+     camino = GrafoVias.trazarRuta(inicio, fin, g)
+     caminos(vehiculo)=camino
     }
     control=false
   }
