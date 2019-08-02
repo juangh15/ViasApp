@@ -59,7 +59,7 @@ object Simulacion  extends Runnable {
   var control = false
   var inicio:Interseccion = _
   var fin:Interseccion = _
-  for(j <- List(cantidadCarros,cantidadMotos,cantidadBuses,cantidadCamiones,cantidadMototaxis){
+  for(j <- List(cantidadCarros,cantidadMotos,cantidadBuses,cantidadCamiones,cantidadMototaxis)){
    for(i <- 1 to j){  
       //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
       inicio = intersecciones(r.nextInt(limIndex))
