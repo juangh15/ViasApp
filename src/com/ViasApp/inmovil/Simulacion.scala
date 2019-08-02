@@ -35,13 +35,6 @@ object Simulacion  extends Runnable {
   
   //total de vehiculos y la proporcion de cada uno los lee del json
   // Creación arreglo de vehículos
-  /*
-  
-  val totalVehiculos = (math.random()*(maxVehiculos-minVehiculos))+minVehiculos
-  val carros = math.random()*totalVehiculos
-  val motos = math.random()*(totalVehiculos-carros)+carros
-  //Así hasta motoTaxis
-  */
   
    // Intersecciones de la base de datos
   val niquia = new Interseccion(300, 12000, "Niquia")     ; val lauraAuto = new Interseccion(2400, 11400, "M. Laura Auto")     ; val lauraReg = new Interseccion(2400, 12600, "M. Laura Reg")     ; val ptoCero = new Interseccion(5400, 12000, "Pto 0")     ; val mino = new Interseccion(6300, 15000, "Minorista")     ; val villa = new Interseccion(6300, 19500, "Villanueva") 
@@ -57,19 +50,21 @@ object Simulacion  extends Runnable {
       new Via(viva, gu_37S, 60, TipoVia("Calle"), Sentido.dobleVia, "63", "37S"));
   
   //inicio variable random
-  var r = new Random()
-  var vehiculos = new ArrayBuffer[Vehiculo]()
+  val r = new Random()
+  val vehiculos = new ArrayBuffer[Vehiculo]()
       //inicio=//Aqui tiene que darle la interseccion de origen
     //final= //Aqui le tiene que asignar la final
-  
+  val limIndex = intersecciones.size - 1
   //Creación de los vehiculos
+  
+  //carros
   for(i <- 1 to cantidadCarros){  
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
-    var posicion = r.nextInt(41)
+    var posicion = r.nextInt(limIndex)
     var inicio = intersecciones(posicion)
     var control = false
     while (control == false) {
-      posicion = r.nextInt(41)
+      posicion = r.nextInt(limIndex)
       var fin = intersecciones(posicion)
       if (fin != inicio) {
         control = true
@@ -77,13 +72,14 @@ object Simulacion  extends Runnable {
     }
     vehiculos += new Carro(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextInt}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
   }
+  //motos
   for(i <- 1 to cantidadMotos){  
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
-    var posicion = r.nextInt(41)
+    var posicion = r.nextInt(limIndex)
     var inicio = intersecciones(posicion)
     var control = false
     while (control == false) {
-      posicion = r.nextInt(41)
+      posicion = r.nextInt(limIndex)
       var fin = intersecciones(posicion)
       if (fin != inicio) {
         control = true
@@ -91,13 +87,14 @@ object Simulacion  extends Runnable {
     }    
     vehiculos += new Moto(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextPrintableChar}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
   }
+  //buses
   for(i <- 1 to cantidadBuses){  
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
-    var posicion = r.nextInt(41)
+    var posicion = r.nextInt(limIndex)
     var inicio = intersecciones(posicion)
     var control = false
     while (control == false) {
-      posicion = r.nextInt(41)
+      posicion = r.nextInt(limIndex)
       var fin = intersecciones(posicion)
       if (fin != inicio) {
         control = true
@@ -105,13 +102,14 @@ object Simulacion  extends Runnable {
     }    
     vehiculos += new Bus(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextInt}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
   }
+  //camiones
   for(i <- 1 to cantidadCamiones){  
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
-    var posicion = r.nextInt(41)
+    var posicion = r.nextInt(limIndex)
     var inicio = intersecciones(posicion)
     var control = false
     while (control == false) {
-      posicion = r.nextInt(41)
+      posicion = r.nextInt(limIndex)
       var fin = intersecciones(posicion)
       if (fin != inicio) {
         control = true
@@ -119,13 +117,14 @@ object Simulacion  extends Runnable {
     }    
     vehiculos += new Camion(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextInt}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
   }
+  //mototaxis
   for(i <- 1 to cantidadMototaxis){  
     //Tiene que generar la lista que llegue más rapido al final de cada carro y no se si guardarlo en una matriz
-    var posicion = r.nextInt(41)
+    var posicion = r.nextInt(limIndex)
     var inicio = intersecciones(posicion)
     var control = false
     while (control == false) {
-      posicion = r.nextInt(41)
+      posicion = r.nextInt(limIndex)
       var fin = intersecciones(posicion)
       if (fin != inicio) {
         control = true
