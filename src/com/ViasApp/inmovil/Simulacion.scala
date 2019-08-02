@@ -131,23 +131,15 @@ object Simulacion  extends Runnable {
     }    
     vehiculos += new MotoTaxi(s"${r.nextPrintableChar}${r.nextPrintableChar}${r.nextPrintableChar}${r.nextInt}${r.nextInt}${r.nextPrintableChar}",inicio, (math.random()*(maxVelocidad-minVelocidad)+minVelocidad))
   }
-  //Así hasta moto taxi
-  
     
     var g = GrafoVias.construir(vias)//Devuelve graph del mapa
     val grafico = new Grafico()//Tal vez este mal escrito
-    val ventana = grafico.graficarVias(vias) //Devuelve un Jframe con el dibujo del mapa(JFrame es una ventana que contiene dibujo titulo y otras cosas)
-
-    //val chart = ventana.(fnqueextraeelfreechart)
-
-    val plot: XYPlot = ventana.getXYPlot()//Si da error hay que buscar una funcion que extraiga el Jfreechart
-  
   
  def run() {
    while (true) {
      vehiculos.foreach(_.mover(dt))
      t += dt
-     val imagen = grafico.graficarVehiculos(vehiculos.toArray)
+     val imagen = grafico.graficarVehiculos(vehiculos.toArray,vias)
      Thread.sleep(tRefresh)
  }
 }
