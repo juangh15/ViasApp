@@ -182,4 +182,5 @@ object Simulacion extends Runnable {
       Thread.sleep(tRefresh.toLong)
     }
   }
+   val Resultados = new ResultadosSimulacion(cantidadVehiculos, cantidadCarros, cantidadMotos, cantidadBuses, cantidadCamiones, cantidadMototaxis, vias, intersecciones, vehiculos.toArray, t)
 }
