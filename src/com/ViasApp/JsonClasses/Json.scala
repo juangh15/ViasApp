@@ -315,23 +315,30 @@ class InputParametrosSimulacionSerializer extends Serializer[InputParametrosSimu
 }
 ////////////////////////////////////////Fin de resultadosSimulacion///////////////////////////////////////////
 object Json{
-  implicit val formats = Serialization.formats(NoTypeHints) +
-  new VelocidadesSerializer + 
-  new VehiculosEnInterseccionSerializer +
-  new VehiculosSerializer +
-  new MallaVialSerializer +
-  new TiemposSerializer +
-  new VelocidadesSerializer +
-  new DistanciasSerializer +
-  new ResultadosSimulacionSerializer +
-  new InputResultadosSimulacionSerializer +
-  //ParametosSimulacion:
-  new ProporcionesSerializer +
-  new VelocidadSerializer + 
-  new ParametroVehiculosSerializer +
-  new ParametrosSimulacionSerializer+
-  new InputParametrosSimulacionSerializer
+  implicit val formats = DefaultFormats
+//  Serialization.formats(NoTypeHints) +
+//  new VelocidadesSerializer + 
+//  new VehiculosEnInterseccionSerializer +
+//  new VehiculosSerializer +
+//  new MallaVialSerializer +
+//  new TiemposSerializer +
+//  new VelocidadesSerializer +
+//  new DistanciasSerializer +
+//  new ResultadosSimulacionSerializer +
+//  new InputResultadosSimulacionSerializer +
+//  //ParametosSimulacion:
+//  new ProporcionesSerializer +
+//  new ParametroVehiculosSerializer +
+//  new ParametrosSimulacionSerializer+
+//  new InputParametrosSimulacionSerializer+
+//  new VelocidadSerializer
   
+   val aux = Json.LeerJson("parametros.json")
+  
+  def datosSimulacion():Unit = new ParametrosSimulacion(aux.dt,aux.tRefresh,new ParametroVehiculos(aux.vehiculos.minimo,aux.vehiculos.maximo),
+      new Velocidad(aux.velocidad.minimo,aux.velocidad.maximo), new Proporciones(aux.proporciones.carros,
+          aux.proporciones.motos,aux.proporciones.buses,aux.proporciones.camiones,aux.proporciones.motoTaxis))
+ 
   def escribirArchivo(ruta: String, resultados:InputResultadosSimulacion) {
     import net.liftweb.json.Serialization.write
     val pw = new PrintWriter(new File(ruta))
@@ -339,9 +346,9 @@ object Json{
     pw.close
   }
   
-  def LeerJson(ruta:String):Unit = {
+  def LeerJson(ruta:String):ParametrosSimulacion = {
     val contenido = Source.fromFile(ruta).getLines.mkString
-    
-    parse(contenido)
+    parse(contenido).extract[InputParametrosSimulacion].parametrosSimulacion
   }
+ 
 }
