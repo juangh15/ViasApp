@@ -1,7 +1,6 @@
 package com.ViasApp.JsonClasses
 import net.liftweb.json._
 import java.io._
-import com.ViasApp.Criaturas.Animal
 import scala.io.Source
 
 //////////////////////////////////////Inicio de resultadosSimulacion//////////////////////////////////////////////
