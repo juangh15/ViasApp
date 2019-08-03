@@ -22,11 +22,12 @@ object GrafoVias {
 
   def trazarRuta(inicio: Interseccion, fin: Interseccion, k: Graph[Interseccion, WLDiEdge]=GrafoVias.grafo): k.Path = {
     def nodo(outer: Interseccion): k.NodeT = k get outer
-
+ 
     val n1: k.NodeT = nodo(inicio)
     val n2: k.NodeT = nodo(fin)
     val z = (n1) shortestPathTo (n2)
-    scala.collection.mutable.Queue((z.get).nodes.toSeq: _*)
+    z.getOrElse((n1 shortestPathTo n1).get)
+
 
   }
 }
