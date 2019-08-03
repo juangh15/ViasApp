@@ -4,6 +4,8 @@ import java.io._
 import com.ViasApp.Criaturas.Animal
 import scala.io.Source
 
+//////////////////////////////////////Inicio de resultadosSimulacion//////////////////////////////////////////////
+
 case class Vehiculos(total:Int,carros:Int,
                      motos:Int,buses:Int,
                      camiones:Int,motoTaxis:Int)
@@ -15,7 +17,7 @@ case class Vehiculos(total:Int,carros:Int,
     JField("camiones", JInt(camiones)) ::
     JField("motoTaxis", JInt(motoTaxis)) :: Nil
 }
-class VehiculosSerializer {
+class VehiculosSerializer extends Serializer[Vehiculos]{
   private val claseV = classOf[Vehiculos]
   def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), Vehiculos] = {
     case (TypeInfo(claseV, _), json) => json match {
@@ -47,19 +49,22 @@ case class MallaVial(vias:Int,intersecciones:Int,
   JField("longitudPromedio", JInt(longitudPromedio)) ::
   JField("vehiculosEnInterseccion", JObject(vehiculosEnInterseccion.getAtributosJson)) :: Nil
 }
-class MallaVialSerializer {
+class MallaVialSerializer extends Serializer[MallaVial]{
   private val clase = classOf[MallaVial]
   def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), MallaVial] = {
     case (TypeInfo(clase, _), json) => json match {
-//    case JObject(JField("vias", JInt(vias)) ::
-//  JField("intersecciones", JInt(intersecciones)) ::
-//  JField("viasUnSentido", JInt(viasUnSentido)) ::
-//  JField("viasDobleSentido", JInt(viasDobleSentido)) ::
-//  JField("velocidadMinima", JInt(velocidadMinima)) ::
-//  JField("velocidadMaxima", JInt(velocidadMaxima)) ::
-//  JField("longitudPromedio", JInt(longitudPromedio)) ::
-//  JField("vehiculosEnInterseccion", JObject(vehiculosEnInterseccion)) :: Nil) =>
-//      new MallaVial(vias.intValue,intersecciones.intValue,viasUnSentido.intValue,viasDobleSentido.intValue,velocidadMinima.intValue,velocidadMaxima.intValue,longitudPromedio.intValue,vehiculosEnInterseccion)
+    case JObject(JField("vias", JInt(vias)) ::
+  JField("intersecciones", JInt(intersecciones)) ::
+  JField("viasUnSentido", JInt(viasUnSentido)) ::
+  JField("viasDobleSentido", JInt(viasDobleSentido)) ::
+  JField("velocidadMinima", JInt(velocidadMinima)) ::
+  JField("velocidadMaxima", JInt(velocidadMaxima)) ::
+  JField("longitudPromedio", JInt(longitudPromedio)) ::
+  JField("vehiculosEnInterseccion", vehiculosEnInterseccion) :: Nil) =>
+      new MallaVial(vias.intValue,intersecciones.intValue,
+          viasUnSentido.intValue,viasDobleSentido.intValue,
+          velocidadMinima.intValue,velocidadMaxima.intValue,
+          longitudPromedio.intValue,vehiculosEnInterseccion.extract[VehiculosEnInterseccion]) 
     case x => throw new MappingException("No se puede convertir " + x + " a MallaVial")
     }
   }
@@ -77,7 +82,7 @@ case class VehiculosEnInterseccion(promedioOrigen:Int,
   JField("sinDestino", JInt(sinDestino)) :: Nil
   
 }
-class VehiculosEnInterseccionSerializer {
+class VehiculosEnInterseccionSerializer extends Serializer[VehiculosEnInterseccion]{
   private val clase = classOf[VehiculosEnInterseccion]
   def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), VehiculosEnInterseccion] = {
     case (TypeInfo(clase, _), json) => json match {
@@ -97,7 +102,7 @@ case class Tiempos(simulacion:Int,realidad:Int) extends SerializableJson{
   def getAtributosJson = JField("simulacion", JInt(simulacion)) ::
   JField("realidad", JInt(realidad)) :: Nil
 }
-class TiemposSerializer{
+class TiemposSerializer extends Serializer[Tiempos]{
   private val clase = classOf[Tiempos]
   def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), Tiempos] = {
     case (TypeInfo(clase, _), json) => json match {
@@ -116,7 +121,7 @@ case class Velocidades(minima:Int,maxima:Int,promedio:Int) extends SerializableJ
   JField("maxima", JInt(maxima)) ::
   JField("promedio", JInt(promedio)) :: Nil
 }
-class VelocidadesSerializer {
+class VelocidadesSerializer extends Serializer[Velocidades]{
   private val clase = classOf[Velocidades]
   def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), Velocidades] = {
     case (TypeInfo(clase, _), json) => json match {
@@ -131,13 +136,12 @@ class VelocidadesSerializer {
     case x: Velocidades => JObject(x.getAtributosJson)
   }
 }
-
 case class Distancias(minima:Int,maxima:Int,promedio:Int)extends SerializableJson{
   def getAtributosJson = JField("minima", JInt(minima)) ::
   JField("maxima", JInt(maxima)) ::
   JField("promedio", JInt(promedio)) :: Nil
 }
-class DistanciasSerializer {
+class DistanciasSerializer extends Serializer[Distancias]{
   private val clase = classOf[Distancias]
   def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), Distancias] = {
     case (TypeInfo(clase, _), json) => json match {
@@ -163,25 +167,173 @@ case class ResultadosSimulacion(vehiculos:Vehiculos,
   JField("velocidades", JObject(velocidades.getAtributosJson)) ::
   JField("distancias", JObject(distancias.getAtributosJson)) :: Nil
 }
-class ResultadosSimulacionSerializer {
-  //  private val clase = classOf[]
-//  def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), ] = {
-//    case (TypeInfo(clase, _), json) => json match {
-//    case JObject(JField("", JInt())::Nil) =>
-//      new ()
-//    case x => throw new MappingException("No se puede convertir " + x + " a ")
-//    }
-//  }
+class ResultadosSimulacionSerializer extends Serializer[ResultadosSimulacion]{
+  private val clase = classOf[ResultadosSimulacion]
+  def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), ResultadosSimulacion] = {
+    case (TypeInfo(clase, _), json) => json match {
+    case JObject(
+  JField("vehiculos", vehiculos) ::
+  JField("mallaVial", mallaVial) ::
+  JField("tiempos", tiempos) ::
+  JField("velocidades", velocidades) ::
+  JField("distancias", distancias) :: Nil) =>
+      new ResultadosSimulacion(
+          vehiculos.extract[Vehiculos],
+          mallaVial.extract[MallaVial],
+          tiempos.extract[Tiempos],
+          velocidades.extract[Velocidades],
+          distancias.extract[Distancias])
+    case x => throw new MappingException("No se puede convertir " + x + " a ")
+    }
+  }
   def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
     case x: ResultadosSimulacion => JObject(x.getAtributosJson)
   }
 }
+case class InputResultadosSimulacion(resultadosSimulacion:ResultadosSimulacion) extends SerializableJson{
+  def getAtributosJson = JField("resultadosSimulacion",JObject(resultadosSimulacion.getAtributosJson)) :: Nil
+}
+class InputResultadosSimulacionSerializer extends Serializer[InputResultadosSimulacion]{
+  private val claseV = classOf[InputResultadosSimulacion]
+  def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), InputResultadosSimulacion] = {
+    case (TypeInfo(claseV, _), json) => json match {
+    case JObject(JField("resultadosSimulacion",resultadosSimulacion) :: Nil) =>
+      new InputResultadosSimulacion(resultadosSimulacion.extract[ResultadosSimulacion])
+    case x => throw new MappingException("No se puede convertir " + x + " a InputResultadosSimulacion")
+    }
+  }
+  def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
+    case x: InputResultadosSimulacion => JObject(x.getAtributosJson)
+  }
+}
+////////////////////////////////////////Fin de resultadosSimulacion///////////////////////////////////////////
 
 
+//////////////////////////////////////////Inicio parametrosSimulacion/////////////////////////////////////////
+case class Proporciones(carros:Double,motos:Double,buses:Double,camiones:Double,motoTaxis:Double) extends SerializableJson{
+  def getAtributosJson = JField("carros",JDouble(carros)) ::
+                     JField("motos",JDouble(motos)) ::
+                     JField("buses",JDouble(buses)) ::
+                     JField("camiones",JDouble(camiones)) ::
+                     JField("motoTaxis",JDouble(motoTaxis)) ::Nil
+}
+class ProporcionesSerializer extends Serializer[Proporciones]{
+  private val clase = classOf[Proporciones]
+  def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), Proporciones] = {
+    case (TypeInfo(clase, _), json) => json match {
+    case JObject(JField("carros",JDouble(carros)) ::
+                     JField("motos",JDouble(motos)) ::
+                     JField("buses",JDouble(buses)) ::
+                     JField("camiones",JDouble(camiones)) ::
+                     JField("motoTaxis",JDouble(motoTaxis)) ::Nil) =>
+      new Proporciones(carros.doubleValue,motos.doubleValue,buses.doubleValue,camiones.doubleValue,motoTaxis.doubleValue)
+    case x => throw new MappingException("No se puede convertir " + x + " a Proporciones")
+    }
+  }
+  def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
+    case x: Proporciones => JObject(x.getAtributosJson)
+  }
+}
+case class Velocidad(minimo:Int,maximo:Int) extends SerializableJson{
+  def getAtributosJson = JField("minimo",JInt(minimo)) ::
+                     JField("maximo",JInt(maximo)) :: Nil
+}
+class VelocidadSerializer extends Serializer[Velocidad]{
+  private val clase = classOf[Velocidad]
+  def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), Velocidad] = {
+    case (TypeInfo(clase, _), json) => json match {
+    case JObject(JField("minimo",JInt(minimo)) ::
+                     JField("maximo",JInt(maximo)) :: Nil) =>
+      new Velocidad(minimo.intValue,maximo.intValue)
+    case x => throw new MappingException("No se puede convertir " + x + " a Velocidad")
+    }
+  }
+  def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
+    case x: Velocidad => JObject(x.getAtributosJson)
+  }
+}
 
+case class ParametroVehiculos(minimo:Int,maximo:Int) extends SerializableJson{
+  def getAtributosJson = JField("minimo",JInt(minimo)) ::
+                     JField("maximo",JInt(maximo)) :: Nil
+}
+class ParametroVehiculosSerializer extends Serializer[ParametroVehiculos]{
+  private val clase = classOf[ParametroVehiculos]
+  def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), ParametroVehiculos] = {
+    case (TypeInfo(clase, _), json) => json match {
+    case JObject(JField("minimo",JInt(minimo)) ::
+                     JField("maximo",JInt(maximo)) :: Nil) =>
+      new ParametroVehiculos(minimo.intValue,maximo.intValue)
+    case x => throw new MappingException("No se puede convertir " + x + " a ParametroVehiculos")
+    }
+  }
+  def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
+    case x: ParametroVehiculos => JObject(x.getAtributosJson)
+  }
+}
+
+case class ParametrosSimulacion(dt:Int,tRefresh:Int,vehiculos:ParametroVehiculos,velocidad:Velocidad,proporciones:Proporciones) extends SerializableJson{
+  def getAtributosJson = JField("dt",JInt(dt)) ::
+                         JField("tRefresh",JInt(tRefresh)) ::
+                         JField("vehiculos",JObject(vehiculos.getAtributosJson)) ::
+                         JField("velocidad",JObject(velocidad.getAtributosJson)) ::
+                         JField("proporciones",JObject(proporciones.getAtributosJson)) :: Nil
+}
+class ParametrosSimulacionSerializer extends Serializer[ParametrosSimulacion]{
+  private val clase = classOf[ParametrosSimulacion]
+  def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), ParametrosSimulacion] = {
+    case (TypeInfo(clase, _), json) => json match {
+    case JObject(JField("dt",JInt(dt)) ::
+                         JField("tRefresh",JInt(tRefresh)) ::
+                         JField("vehiculos",vehiculos) ::
+                         JField("velocidad",velocidad) ::
+                         JField("proporciones",proporciones) :: Nil) =>
+      new ParametrosSimulacion(dt.intValue,tRefresh.intValue,vehiculos.extract[ParametroVehiculos],
+                               velocidad.extract[Velocidad],proporciones.extract[Proporciones])
+    case x => throw new MappingException("No se puede convertir " + x + " a ParametrosSimulacion")
+    }
+  }
+  def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
+    case x: ParametrosSimulacion => JObject(x.getAtributosJson)
+  }
+}
+
+case class InputParametrosSimulacion(parametrosSimulacion:ParametrosSimulacion) extends SerializableJson{
+  def getAtributosJson = JField("parametrosSimulacion",JObject(parametrosSimulacion.getAtributosJson)) :: Nil
+}
+class InputParametrosSimulacionSerializer extends Serializer[InputParametrosSimulacion]{
+  private val claseV = classOf[InputParametrosSimulacion]
+  def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), InputParametrosSimulacion] = {
+    case (TypeInfo(clase, _), json) => json match {
+    case JObject(JField("parametrosSimulacion",parametrosSimulacion) :: Nil) =>
+      new InputParametrosSimulacion(parametrosSimulacion.extract[ParametrosSimulacion])
+    case x => throw new MappingException("No se puede convertir " + x + " a InputParametrosSimulacion")
+    }
+  }
+  def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
+    case x: InputParametrosSimulacion => JObject(x.getAtributosJson)
+  }
+}
+////////////////////////////////////////Fin de resultadosSimulacion///////////////////////////////////////////
 object Json{
-  implicit val formats = Serialization.formats(NoTypeHints)
-  def escribirArchivo(ruta: String, resultados:ResultadosSimulacion) {
+  implicit val formats = Serialization.formats(NoTypeHints) +
+  new VelocidadesSerializer + 
+  new VehiculosEnInterseccionSerializer +
+  new VehiculosSerializer +
+  new MallaVialSerializer +
+  new TiemposSerializer +
+  new VelocidadesSerializer +
+  new DistanciasSerializer +
+  new ResultadosSimulacionSerializer +
+  new InputResultadosSimulacionSerializer +
+  //ParametosSimulacion:
+  new ProporcionesSerializer +
+  new VelocidadSerializer + 
+  new ParametroVehiculosSerializer +
+  new ParametrosSimulacionSerializer+
+  new InputParametrosSimulacionSerializer
+  
+  def escribirArchivo(ruta: String, resultados:InputResultadosSimulacion) {
     import net.liftweb.json.Serialization.write
     val pw = new PrintWriter(new File(ruta))
     pw.write(write(resultados))
@@ -190,9 +342,7 @@ object Json{
   
   def LeerJson(ruta:String):Unit = {
     val contenido = Source.fromFile(ruta).getLines.mkString
-    println(s"contenido: $contenido")
-    val parsed = parse(contenido)
-    print(parsed)
+    
+    parse(contenido)
   }
 }
-
