@@ -15,17 +15,22 @@ object GrafoVias {
 
       grafo.add(WLDiEdge(via_actual.origen, via_actual.fin)(via_actual.longitud, via_actual))
       if (via_actual.sentido.nombre == "dobleVia") {
-        grafo.add(WLDiEdge(via_actual.fin, via_actual.origen)(via_actual.longitud, via_actual))
+        var viadoble = new Via(via_actual.fin, via_actual.origen,via_actual.velocidad, via_actual.tipovia, via_actual.sentido, via_actual.numero, via_actual.nombre)
+        grafo.add(WLDiEdge(viadoble.origen, viadoble.fin)(viadoble.longitud, viadoble))
       }
     })
   }
 
   def trazarRuta(inicio: Interseccion, fin: Interseccion, k: Graph[Interseccion, WLDiEdge]=GrafoVias.grafo): k.Path = {
     def nodo(outer: Interseccion): k.NodeT = k get outer
- 
+    println("intenta obtener del grafo: "+inicio)
     val n1: k.NodeT = nodo(inicio)
+    println("intenta obtener del grafo: "+fin)
     val n2: k.NodeT = nodo(fin)
+    
     val z = (n1) shortestPathTo (n2)
+    
+    println("generando la ruta en grafovias;")
     z.getOrElse((n1 shortestPathTo n1).get)
 
 
