@@ -5,23 +5,23 @@ import com.ViasApp.inmovil._
 import com.ViasApp.movil._
 import scala.util.Random
 import scalax.collection.mutable.Graph
-import scalax.collection.edge.WLDiEdge
+import scalax.collection.edge.WLDiEdge 
 import scala.collection.mutable.{ Queue, Map }
 
 object Simulacion extends Runnable {
 
   var t: Double = 0.1
-
+//SE OMITIO COLFER
   var random = scala.util.Random
   // lectura variables del json
   // lectura variables del json
   //  val json = new Json
   val dt = 0.9
-  val tRefresh = 500
-  val minVehiculos = 3
-  val maxVehiculos = 6
-  val minVelocidad = 3
-  val maxVelocidad = 6
+  val tRefresh = 100
+  val minVehiculos = 10
+  val maxVehiculos = 25
+  val minVelocidad = 80
+  val maxVelocidad = 100
   val proporcionCarros = 0.2
   val proporcionMotos = 0.2
   val proporcionBuses = 0.2
@@ -43,7 +43,7 @@ object Simulacion extends Runnable {
   val niquia = new Interseccion(300, 12000, "Niquia"); val lauraAuto = new Interseccion(2400, 11400, "M. Laura Auto"); val lauraReg = new Interseccion(2400, 12600, "M. Laura Reg"); val ptoCero = new Interseccion(5400, 12000, "Pto 0"); val mino = new Interseccion(6300, 15000, "Minorista"); val villa = new Interseccion(6300, 19500, "Villanueva"); val ig65 = new Interseccion(5400, 10500, "65 Igu"); val robledo = new Interseccion(5400, 1500, "Exito Rob"); val colReg = new Interseccion(8250, 12000, "Col Reg"); val colFerr = new Interseccion(8250, 15000, "Col Ferr"); val col65 = new Interseccion(8250, 10500, "Col 65"); val col80 = new Interseccion(8250, 1500, "Col 80"); val juanOr = new Interseccion(10500, 19500, "Sn Juan Ori"); val maca = new Interseccion(10500, 12000, "Macarena"); val expo = new Interseccion(12000, 13500, "Exposiciones"); val reg30 = new Interseccion(13500, 15000, "Reg 30"); val monte = new Interseccion(16500, 15000, "Monterrey"); val agua = new Interseccion(19500, 15000, "Aguacatala"); val viva = new Interseccion(21000, 15000, "Viva Env"); val mayor = new Interseccion(23400, 15000, "Mayorca"); val ferrCol = new Interseccion(8250, 15000, "Ferr Col"); val ferrJuan = new Interseccion(10500, 15000, "Alpujarra"); val sanDiego = new Interseccion(12000, 19500, "San Diego"); val premium = new Interseccion(13500, 19500, "Premium"); val pp = new Interseccion(16500, 19500, "Parque Pob"); val santafe = new Interseccion(19500, 18750, "Santa Fe"); val pqEnv = new Interseccion(21000, 18000, "Envigado"); val juan65 = new Interseccion(10500, 10500, "Juan 65"); val juan80 = new Interseccion(10500, 1500, "Juan 80"); val _33_65 = new Interseccion(12000, 10500, "33 con 65"); val bule = new Interseccion(12000, 7500, "Bulerias"); val gema = new Interseccion(12000, 1500, "St Gema"); val _30_65 = new Interseccion(13500, 10500, "30 con 65"); val _30_70 = new Interseccion(13500, 4500, "30 con 70"); val _30_80 = new Interseccion(13500, 1500, "30 con 80"); val bol65 = new Interseccion(11100, 10500, "Boliv con 65"); val gu10 = new Interseccion(16500, 12000, "Guay con 10"); val terminal = new Interseccion(16500, 10500, "Term Sur"); val gu30 = new Interseccion(13500, 12000, "Guay 30"); val gu80 = new Interseccion(19500, 12000, "Guay 80"); val _65_80 = new Interseccion(19500, 10500, "65 con 30"); val gu_37S = new Interseccion(21000, 12000, "Guay con 37S");
 
   //arreglo intersecciones
-  val intersecciones = Array(niquia, lauraAuto, lauraReg, ptoCero, mino, villa, ig65, robledo, colReg, colFerr, col65, col80, juanOr, maca, expo, reg30, monte, agua, viva, mayor, ferrCol, ferrJuan, sanDiego, premium, pp, santafe, pqEnv, juan65, juan80, _33_65, bule, gema, _30_65, _30_70, _30_80, bol65, gu10, terminal, gu30, gu80, _65_80, gu_37S)
+  val intersecciones = Array(niquia, lauraAuto, lauraReg, ptoCero, mino, villa, ig65, robledo, colReg, col65, col80, juanOr, maca, expo, reg30, monte, agua, viva, mayor, ferrCol, ferrJuan, sanDiego, premium, pp, santafe, pqEnv, juan65, juan80, _33_65, bule, gema, _30_65, _30_70, _30_80, bol65, gu10, terminal, gu30, gu80, _65_80, gu_37S)
 
   // Arreglo de vias de la base de datos
   val vias = Array(
@@ -56,7 +56,7 @@ object Simulacion extends Runnable {
   GrafoVias.construir(vias)
   val g = GrafoVias.grafo //Devuelve graph del mapa
   val grafico = new Grafico() //Tal vez este mal escrito
-  val radioPermitido = 100
+  val radioPermitido = 500
   var vehiculos = new ArrayBuffer[Vehiculo]()
 
   val limIndex = intersecciones.size - 1
@@ -71,65 +71,73 @@ object Simulacion extends Runnable {
   var indice = 0
   for (j <- List(cantidadCarros, cantidadMotos, cantidadBuses, cantidadCamiones, cantidadMototaxis)) {
     for (i <- 1 to j) {
+      println("------------------------------------------------------------")
       //obtiene intersecciones aleatorias para el inicio y el final del camino
       inicio = intersecciones(r.nextInt(limIndex))
-      println(inicio)
+      
       while (control == false) {
         fin = intersecciones(r.nextInt(limIndex))
         if (fin != inicio) {
           control = true
         }
       }
+      control = false 
+      println("comienza en: "+inicio)
+      println("termina en: "+fin)
 
       //EDGES se obtiene la mejor ruta
-
-      val edges = GrafoVias.trazarRuta(inicio, fin).edges
-
+      var edges = GrafoVias.trazarRuta(inicio, fin).edges
       //LAS VIAS SE AGREGAN AL CAMINO
       camino = new Queue[Via]()
       edges.foreach(x => camino.+=(x.toOuter.label.asInstanceOf[Via]))
-      println("entro a camino y genero la ruta:")
-      camino.foreach(x => println(x.origen + " > " + x.fin + "\n"))
+      println("entro a camino y genero la ruta: ")
+      if(camino.isEmpty){
+        println("no ruta generada")
+      }
+      else{
+      camino.foreach(x => println(x.origen + " > " + x.fin + "\n"))}
 
-      var velocidad_primera = cambioVelocidad(new Velocidad(camino.front.velocidad, camino.front.angulo))
+      var velocidad_primera = cambioVelocidad(camino.front)
       println("se creó la velocidad" + velocidad_primera.magnitud + "con dir: " + velocidad_primera.direccion)
 
       //se crea la instancia de vehiculo segun el caso
       val letras = Array("A", "B", "C", "D", "E", "F", "G", "Z", "X", "Y", "T")
       indice match {
-        case 0 => vehiculo = new Carro(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", inicio, velocidad_primera)
-        case 1 => vehiculo = new Moto(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", inicio, velocidad_primera)
-        case 2 => vehiculo = new Bus(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", inicio, velocidad_primera)
-        case 3 => vehiculo = new Camion(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", inicio, velocidad_primera)
-        case 4 => vehiculo = new MotoTaxi(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", inicio, velocidad_primera)
+        case 0 => vehiculo = new Carro(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
+        case 1 => vehiculo = new Moto(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
+        case 2 => vehiculo = new Bus(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
+        case 3 => vehiculo = new Camion(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
+        case 4 => vehiculo = new MotoTaxi(s"${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}${letras(r.nextInt(letras.size - 1))}-${r.nextInt(9)}${r.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
       }
 
       vehiculos += vehiculo
-      println(s"se logro crear el vehiculo: $vehiculo")
+      println(s"se logro crear el vehiculo: $vehiculo con velocidad ${vehiculo.velocidad}")
 
       //A LOS CAMINOS SE AGREGA EL VEHICULO CREADO Y SU RUTA
 
       caminos += (vehiculo -> camino)
+      
     }
     indice += 1
-    control = false
+    
   }
   //para no salirse del rango de velocidad permitido
-  def cambioVelocidad(v: Velocidad): Velocidad = {
+  def cambioVelocidad(via: Via): Velocidad = {
+    
     var min = 0
     var max = 0
-    if (minVelocidad < v.magnitud) {
+    if (minVelocidad < via.velocidad) {
       min = minVelocidad
     } else {
-      min = v.magnitud.toInt
+      min = via.velocidad.toInt
     }
-    if (maxVelocidad > v.magnitud) {
+    if (maxVelocidad > via.velocidad) {
       max = maxVelocidad
     } else {
-      max = v.magnitud.toInt
+      max = via.velocidad.toInt
     }
     var velo = min + r.nextInt(max - min + 1)
-    return new Velocidad(velo, v.direccion)
+    return new Velocidad(velo, via.angulo)
   }
 
   //control de rutas general
@@ -152,14 +160,23 @@ object Simulacion extends Runnable {
             vehiculo_actual.velocidad.direccion_=(new Angulo(0))
           } else {
             //crea una nueva velocidad para el vehiculo basandose en la nueva via
-            var nueva_velocidad = cambioVelocidad(new Velocidad(camino_actual.front.velocidad, camino_actual.front.angulo))
+            var nueva_velocidad = cambioVelocidad(camino_actual.front)
             vehiculo_actual.velocidad_=(nueva_velocidad)
             vehiculo_actual.mover(dt)
           }
 
         } else {
+          vehiculo_actual.velocidad.direccion_=(camino_actual.front.angulo)
           vehiculo_actual.mover(dt)
         }
+      }
+      else{
+        vehiculo_actual.velocidad.magnitud_=(0)
+            vehiculo_actual.velocidad.direccion_=(new Angulo(0))
+            println(vehiculo_actual+" llego a su destino")
+      }
+      if(vehiculo_actual.posicion.x>23000||vehiculo_actual.posicion.y>19900||vehiculo_actual.posicion.x<0||vehiculo_actual.posicion.y<0){
+        vehiculo_actual.velocidad.magnitud_=(0.0)
       }
     })
 
@@ -182,5 +199,5 @@ object Simulacion extends Runnable {
       Thread.sleep(tRefresh.toLong)
     }
   }
-   val Resultados = new ResultadosSimulacion(cantidadVehiculos, cantidadCarros, cantidadMotos, cantidadBuses, cantidadCamiones, cantidadMototaxis, vias, intersecciones, vehiculos.toArray, t)
+//   val Resultados = new ResultadosSimulacion(cantidadVehiculos, cantidadCarros, cantidadMotos, cantidadBuses, cantidadCamiones, cantidadMototaxis, vias, intersecciones, vehiculos.toArray, t)
 }
