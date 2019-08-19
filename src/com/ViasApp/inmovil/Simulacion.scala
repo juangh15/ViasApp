@@ -3,10 +3,12 @@ import scala.collection.mutable.ArrayBuffer
 import com.ViasApp.movimiento._
 import com.ViasApp.inmovil._
 import com.ViasApp.movil._
+import com.ViasApp.JsonClasses.ResultadosParaSimulacion
 import scala.util.Random
 import scalax.collection.mutable.Graph
 import scalax.collection.edge.WLDiEdge 
 import scala.collection.mutable.{ Queue, Map }
+import com.ViasApp.JsonClasses.ManejoJson
 
 object Simulacion extends Runnable {
 
@@ -16,18 +18,23 @@ object Simulacion extends Runnable {
   // lectura variables del json
   // lectura variables del json
   //  val json = new Json
-  val dt = 0.9
-  val tRefresh = 100
-  val minVehiculos = 10
-  val maxVehiculos = 25
-  val minVelocidad = 80
-  val maxVelocidad = 100
-  val proporcionCarros = 0.2
-  val proporcionMotos = 0.2
-  val proporcionBuses = 0.2
-  val proporcionCamiones = 0.2
-  val proporcionMototaxis = 0.2
-
+  val dt = ManejoJson.parametros.dt
+  val tRefresh = ManejoJson.parametros.tRefresh
+  val minVehiculos = ManejoJson.parametros.vehiculos.minimo
+  val maxVehiculos = ManejoJson.parametros.vehiculos.maximo
+  val minVelocidad = ManejoJson.parametros.velocidad.minimo
+  val maxVelocidad = ManejoJson.parametros.velocidad.maximo
+  val proporcionCarros = ManejoJson.parametros.proporciones.carros
+  val proporcionMotos = ManejoJson.parametros.proporciones.motos
+  val proporcionBuses = ManejoJson.parametros.proporciones.buses
+  val proporcionCamiones = ManejoJson.parametros.proporciones.camiones
+  val proporcionMototaxis = ManejoJson.parametros.proporciones.motoTaxis
+  val minTiempoVerde = ManejoJson.parametros.semaforos.minTiempoVerde
+  val maxTiempoVerde = ManejoJson.parametros.semaforos.maxTiempoVerde
+  val tiempoAmarillo = ManejoJson.parametros.semaforos.tiempoAmarillo
+  val XSemaforoFrenar = ManejoJson.parametros.distanciasFrenadoVehiculos.XSemaforoFrenar
+  val XSemaforoAmarilloContinuar = ManejoJson.parametros.distanciasFrenadoVehiculos.XSemaforoAmarilloContinuar
+  
   //cantidad de vehiculos aleatoria entre limites y cantidad por tipo de vehiculo
   val cantidadVehiculos = minVehiculos + random.nextInt((maxVehiculos - minVehiculos) + 1)
   val cantidadCarros = (proporcionCarros * cantidadVehiculos).toInt
@@ -199,5 +206,12 @@ object Simulacion extends Runnable {
       Thread.sleep(tRefresh.toLong)
     }
   }
-//   val Resultados = new ResultadosSimulacion(cantidadVehiculos, cantidadCarros, cantidadMotos, cantidadBuses, cantidadCamiones, cantidadMototaxis, vias, intersecciones, vehiculos.toArray, t)
+  //val Resultados = new ResultadosSimulacion(cantidadVehiculos, cantidadCarros, cantidadMotos, cantidadBuses, cantidadCamiones, cantidadMototaxis, vias, intersecciones, vehiculos.toArray, t)
+    val guardarResultados = new ResultadosParaSimulacion(cantidadVehiculos,
+                                                       cantidadCarros,
+                                                       cantidadMotos,
+                                                       cantidadBuses,
+                                                       cantidadCamiones,
+                                                       cantidadMototaxis,50,15,10,40,60,80,422,50,46,5,3,
+                                                       600,50,40,80,63,523,1540,1250,1,2)
 }
