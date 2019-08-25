@@ -168,14 +168,20 @@ class Grafico {
     frame.setVisible(true)
     
     //se añade el receptor de las teclas
-    val teclas = new KeyListener() {
+    val teclas: KeyListener = new KeyListener() {
       def keyPressed(e: KeyEvent) {
-        if (e.getKeyCode == KeyEvent.VK_F5)
-          println("f5")
-        else if (e.getKeyCode == KeyEvent.VK_F6)
-          println("f6")
+        if (e.getKeyCode == KeyEvent.VK_F5) {
+            Simulacion.estadoSimulacion = 1
+        } else if (e.getKeyCode == KeyEvent.VK_F6) {
+          Simulacion.estadoSimulacion = 2
+        }
+        else if (e.getKeyCode == KeyEvent.VK_F1) {
+          println("cargar simulacion de la base de datos en neo")
+        }
+        else if (e.getKeyCode == KeyEvent.VK_F2) {
+          println("detener y guardar simulacion tal cual en neo")
+        }
       }
-
       def keyReleased(e: KeyEvent) {
       }
 
