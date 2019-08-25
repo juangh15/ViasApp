@@ -6,7 +6,7 @@ import java.io._
 object ManejoJson {
   implicit val formats = DefaultFormats
   //Es necesario actualizar la siguiente ruta si deseas ejecutar
-  var direccion = "C:\\Users\\prueba\\Desktop\\ViasApp-master\\src\\com\\ViasApp\\parametros.json" 
+  var direccion = com.ViasApp.main.Main.rutaParametros 
   
   case class Vehiculos(minimo: Int, maximo: Int)
   case class Velocidad(minimo: Int, maximo: Int)
