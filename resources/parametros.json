@@ -1,0 +1,30 @@
+{
+"pametrosSimulacion": {
+"dt": 1,
+"tRefresh": 60,
+"vehiculos": {
+"minimo": 10,
+"maximo": 20
+},
+"velocidad": {
+"minimo": 40,
+"maximo": 50
+},
+"proporciones": {
+"carros": 0.4,
+"motos": 0.3,
+"buses": 0.15,
+"camiones": 0.1,
+"motoTaxis": 0.05
+},
+"semaforos": {
+"minTiempoVerde": 40,
+"maxTiempoVerde": 20,
+"tiempoAmarillo": 3
+},
+"distanciasFrenadoVehiculos": {
+"XSemaforoFrenar": 40,
+"XSemaforoAmarilloContinuar": 20
+}
+}
+}
