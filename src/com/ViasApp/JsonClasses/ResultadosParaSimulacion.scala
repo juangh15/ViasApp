@@ -13,7 +13,7 @@ class ResultadosParaSimulacion(
     minima2:Int,maxima2:Int,promedio2:Int,
     cantidad:Int,promedioPorcentajeExceso:Int) {
   
-  ManejoJson.escribirArchivo("C:\\Users\\prueba\\Desktop\\ViasApp-master\\src\\com\\ViasApp\\resultados.json",
+  ManejoJson.escribirArchivo(com.ViasApp.main.Main.rutaResultados,
     new InputResultadosSimulacion(new ResultadosSimulacion(
       new Vehiculos(total,
                     carros,
