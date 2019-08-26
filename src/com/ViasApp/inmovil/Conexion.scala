@@ -112,4 +112,25 @@ object Conexion {
     (vias.toArray[Via], intersecciones.toArray[Interseccion])
   }
 
+  def insertarViajes(viajes:ArrayBuffer[Viaje]){
+    val (driver, session) = getSession()
+    val script:String = ""
+    var cont = 0
+    viajes.foreach(x =>{
+      var cuentaVias:Int = 1
+      script+s"(vehiculo$cont:${x.v.getClass}{pla:'${x.v.placa}',x:${x.v.posicion.x},y:${x.v.posicion.y},mag:${x.v.velocidad.magnitud},dir:${x.v.velocidad.direccion}),\n"
+      script+s"(:Ruta{size:${x.ruta.size},"
+      x.ruta.foreach(y =>
+        //Clave: origenX-origenY-finX-finY
+        script+s"v$cuentaVias:'${y.or.x.toString()}-${y.or.y.toString()}-${y.fn.x.toString()}-${y.fn.y.toString()}',"
+        )
+        script.substring(0,script.size-1)
+        script+s"})<-[:ENRUTADO]-(vehiculo$cont),"
+      cont+=1
+    })
+    script.substring(0,script.size-1)
+    val result = session.run(script)
+    session.close()
+    driver.close()
+  }
 }
