@@ -57,7 +57,7 @@ class Grafico {
     conjunto_intersecciones.foreach(intersecccion_actual => {
 
       //Añade textos en las posiciones iniciales
-      val nuevo_texto = new XYTextAnnotation(intersecccion_actual.nombre, intersecccion_actual.x, intersecccion_actual.y)
+      val nuevo_texto = new XYTextAnnotation(intersecccion_actual.nombre.getOrElse("None"), intersecccion_actual.x, intersecccion_actual.y)
       if (intersecccion_actual.x % 9 == 0) {
         nuevo_texto.setPaint(Color.YELLOW)
       } else if (intersecccion_actual.x % 7 == 0) {
