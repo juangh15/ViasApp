@@ -205,6 +205,10 @@ object Conexion {
             ruta.enqueue(via1)
             condicion = false
           }
+          else if ((via1.origen.x == finX) & (via1.origen.y == finY) & (via1.fin.x == inicioX) & (via1.fin.y == inicioY)) {
+            ruta.enqueue(new Via(via1.fin, via1.origen, via1.velocidad, via1.tipovia, via1.sentido, via1.numero,via1.nombre))
+            condicion = false
+          }
           ind += 1
         }
 
