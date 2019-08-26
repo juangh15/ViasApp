@@ -2,7 +2,9 @@ package com.ViasApp.inmovil
 import org.neo4j.driver.v1._
 import scala.collection.mutable.ArrayBuffer
 import com.ViasApp.movimiento._
+import com.ViasApp.movil._
 import scalax.collection.mutable.ArraySet
+import scala.collection.mutable.Queue
 
 object Conexion {
 
@@ -140,8 +142,78 @@ object Conexion {
     })
     //quita el "\n" y la ultima coma del script
     script = script.substring(0,script.size-2)
-    println(script)
+    //println(script)
     val result = session.run(script)
     session.close()
     driver.close()
-  }}
+  }
+
+  //obtiene array de viajes Viaje(vehiculo, ruta)
+  def getViajes(vias: Array[Via]): ArrayBuffer[Viaje] = {
+    var viajes = ArrayBuffer.empty[Viaje]
+    val (driver, session) = getSession()
+    val script = s"MATCH (N)-[:ENRUTADO]->(Ruta1)\nWHERE (N:Carro) or (N:Bus) or (N:Camion) or (N:Moto) or (N:MotoTaxi)\nRETURN DISTINCT N, labels(N) as clase, Ruta1"
+    val result = session.run(script)
+    while (result.hasNext()) {
+      val valores = result.next().values()
+      
+      //Vnode = nodo del vehiculo
+      val Vnode = valores.get(0)
+      //clase = Clase del vehiculo
+      val clase = valores.get(1).get(0).asString()
+      
+      val velocidad = new Velocidad(Vnode.get("mag").asDouble(), new Angulo(Vnode.get("dir").asDouble()))
+      val posicion = new Punto(Vnode.get("x").asDouble(), Vnode.get("y").asDouble())
+      val placa = Vnode.get("pla").asString()
+
+      //vehiculo generico para luego hacer el matching
+      var vehiculo: Vehiculo = new Vehiculo("k", new Punto(1, 1), new Velocidad(1, new Angulo(0))) {}
+      clase match {
+        case "Bus"      => vehiculo = new Bus(placa, posicion, velocidad)
+        case "Carro"    => vehiculo = new Carro(placa, posicion, velocidad)
+        case "Moto"     => vehiculo = new Moto(placa, posicion, velocidad)
+        case "Camion"   => vehiculo = new Camion(placa, posicion, velocidad)
+        case "MotoTaxi" => vehiculo = new MotoTaxi(placa, posicion, velocidad)
+      }
+      //Rnode = nodo de la ruta
+      val Rnode = valores.get(2)
+
+      //PARA VER LAS LLAVES DE CADA NODO-----------------
+
+      //      println("llaves de nodo")
+      //      println(Vnode.keys())
+      //      println(clase)
+      //      println(Rnode.keys())
+
+      //----------------------------------------
+
+      var ruta = Queue.empty[Via]
+      //obtiene la cantidad de vias 
+      val tamaño = Rnode.get("size").asInt
+      //recorre los strings con coordenadas, de cada via
+      for (i <- 1 to tamaño) {
+        val f = Rnode.get(s"v$i").asString().split("-")
+        val inicioX = f(0).toDouble
+        val inicioY = f(1).toDouble
+        val finX = f(2).toDouble
+        val finY = f(3).toDouble
+        var ind: Int = 0
+        var condicion = true
+        while (condicion) {
+          var via1 = vias(ind)
+          if ((via1.origen.x == inicioX) & (via1.origen.y == inicioY) & (via1.fin.x == finX) & (via1.fin.y == finY)) {
+            ruta.enqueue(via1)
+            condicion = false
+          }
+          ind += 1
+        }
+
+      }
+      viajes += new Viaje(vehiculo, ruta)
+    }
+    session.close()
+    driver.close()
+    viajes
+  }
+
+}
