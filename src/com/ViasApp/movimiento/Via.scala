@@ -2,7 +2,7 @@ package com.ViasApp.movimiento
 import com.ViasApp.inmovil.Recta
 import com.ViasApp.inmovil.Angulo
 
-class Via(var or: Interseccion, var fn: Interseccion, val velocidad: Int, val tipovia: TipoVia, val sentido: Sentido, val numero: String, val nombre: String) extends Recta {
+class Via(var or: Interseccion, var fn: Interseccion, val velocidad: Int, val tipovia: TipoVia, val sentido: Sentido, val numero: String, val nombre: Option[String] = None, val camara: Option[CamaraFotoDeteccion] = None) extends Recta {
   type Origen = Interseccion
   type Fin = Interseccion
   var _origen: Origen = or
