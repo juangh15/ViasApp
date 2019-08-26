@@ -114,23 +114,34 @@ object Conexion {
 
   def insertarViajes(viajes:ArrayBuffer[Viaje]){
     val (driver, session) = getSession()
-    val script:String = ""
+    var script:String = "CREATE "
     var cont = 0
     viajes.foreach(x =>{
       var cuentaVias:Int = 1
-      script+s"(vehiculo$cont:${x.v.getClass}{pla:'${x.v.placa}',x:${x.v.posicion.x},y:${x.v.posicion.y},mag:${x.v.velocidad.magnitud},dir:${x.v.velocidad.direccion}),\n"
-      script+s"(:Ruta{size:${x.ruta.size},"
-      x.ruta.foreach(y =>
+      
+      //obtiene el nombre largo de clase que usa JAVA
+      var classe = x.v.getClass.toString()
+      
+      //recorta solo el nombre utilizado en scala (Carro, Moto, etc)
+      var clase = classe.substring(classe.lastIndexOf("com.ViasApp")+18, classe.size)
+      
+      script+=s"(vehiculo$cont:${clase}{pla:'${x.v.placa}',x:${x.v.posicion.x},y:${x.v.posicion.y},mag:${x.v.velocidad.magnitud},dir:${x.v.velocidad.direccion.valor}}),\n"
+      script+=s"(:Ruta{size:${x.ruta.size},"
+      x.ruta.foreach(y => {
         //Clave: origenX-origenY-finX-finY
-        script+s"v$cuentaVias:'${y.or.x.toString()}-${y.or.y.toString()}-${y.fn.x.toString()}-${y.fn.y.toString()}',"
-        )
-        script.substring(0,script.size-1)
-        script+s"})<-[:ENRUTADO]-(vehiculo$cont),"
+        script+=s"v$cuentaVias:'${y.or.x.toString()}-${y.or.y.toString()}-${y.fn.x.toString()}-${y.fn.y.toString()}',"
+        
+        cuentaVias+=1
+      })
+      //quita la ultima coma dentro de ruta
+        script = script.substring(0,script.size-1)
+        script+=s"})<-[:ENRUTADO]-(vehiculo$cont),\n"
       cont+=1
     })
-    script.substring(0,script.size-1)
+    //quita el "\n" y la ultima coma del script
+    script = script.substring(0,script.size-2)
+    println(script)
     val result = session.run(script)
     session.close()
     driver.close()
-  }
-}
+  }}
