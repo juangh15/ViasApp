@@ -221,8 +221,22 @@ object Simulacion extends Runnable {
         //rango permitido para que se aproxime a la distancia de frenado(, es decir, margen de error)
         val rangoPermitido = 10 
         
+        //esto solo proteje de errores, como tenemos aceleraciones que casi nunca van a encajar con la velocidadAuto o el 0
+        if(vehiculo_actual.velocidad.magnitud>vehiculo_actual.velocidadAuto){
+            vehiculo_actual.velocidad.magnitud=vehiculo_actual.velocidadAuto
+        }else if(vehiculo_actual.velocidad.magnitud<0){
+            vehiculo_actual.velocidad.magnitud=0
+        }
+        
+        
         if(pasa){
-          vehiculo_actual.mover(dt,0)
+          if(vehiculo_actual.velocidad.magnitud==vehiculo_actual.velocidadAuto){
+            vehiculo_actual.mover(dt,0)
+          }else{
+            vehiculo_actual.mover(dt,1)
+          }
+          
+            
         } else {
           if((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y),2)<=(vehiculo_actual.distanciaFrenado+rangoPermitido)*(vehiculo_actual.distanciaFrenado+rangoPermitido)) ){
             vehiculo_actual.mover(dt,-1)
