@@ -370,7 +370,8 @@ object Simulacion extends Runnable {
         println("guardando en neo4j")
         //aqui todos los de conexion
 
-       // Conexion.insertarViajes(viajes)
+        Conexion.insertarViajes(viajes)
+        print("Datos Guardados en Neo4j")
         System.exit(0);  //termina el programa
       }
       
@@ -379,11 +380,12 @@ object Simulacion extends Runnable {
       if (estadoSimulacion == 4) {
         println("comprobando que exista simulacion guardada en neo4j")
         //en este momento esta en false porque se  debe cuadrar todo antes de permitirlo
-        if (false) {
+        val datosCarga = Conexion.getViajes(vias)
+        if (datosCarga.size>0) {
           println("si hay, cargando")
           vehiculos.clear()
           viajes.clear()
-          viajes = Conexion.getViajes(vias)
+          viajes = datosCarga
           viajes.foreach(x => {
             vehiculos += x.v
           })
