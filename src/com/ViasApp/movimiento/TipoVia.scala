@@ -1,6 +1,6 @@
 package com.ViasApp.movimiento
 
-class TipoVia (nombre: String) 
+class TipoVia (val nombre: String) 
 
 object TipoVia{
   def apply(nombre: String): TipoVia ={
