@@ -16,6 +16,7 @@ object ManejoJson {
                           camiones: Double,
                           motoTaxis: Double)
   case class Semaforos(minTiempoVerde:Int, maxTiempoVerde:Int, tiempoAmarillo:Int)
+  case class Aceleracion(minimo: Int,maximo:Int)
   case class DistanciasFrenadoVehiculos(XSemaforoFrenar:Int,XSemaforoAmarilloContinuar:Int)
   case class ParametrosSimulacion(dt: Int,
                                   tRefresh: Int,
@@ -23,6 +24,7 @@ object ManejoJson {
                                   velocidad: Velocidad,
                                   proporciones: Proporciones,
                                   semaforos: Semaforos,
+                                  aceleracion:Aceleracion,
                                   distanciasFrenadoVehiculos:DistanciasFrenadoVehiculos)
   //Lectura de los parametros desde el archivo Json
   val contenidoArchivo = scala.io.Source.fromFile(direccion).getLines.mkString
