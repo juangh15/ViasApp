@@ -30,5 +30,9 @@ class ResultadosSimulacion(val totalVehiculos : Int, val totalCarros : Int, val 
   
   var longitudpromedio = (arrayVias.map(_.longitud).sum)/arrayVias.size
 
+  var velmaxvias = arrayVias.map(_.velocidad).max
+  
+  var velminvias = arrayVias.map(_.velocidad).min
+  
   
 }
