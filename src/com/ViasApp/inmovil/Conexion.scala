@@ -275,6 +275,25 @@ RETURN v,mV,vEI,t,vel,d,c"""
     rPS
   }
   
+  def neoQuitarViasIntersecciones() = {
+    val (driver, session) = getSession()
+    val script = s"""MATCH (v:Via)-[vR]-(i)
+DELETE v,vR,i"""
+    val result = session.run(script)
+    session.close()
+    driver.close()
+  }
+  
+  def neoQuitarResultadosSim() = {
+    val (driver, session) = getSession()
+    val script = s"""MATCH (rS:ResultadosSimulacion)-[r]-(rr)
+MATCH (vEI:vehiculosEnInterseccion)-[r2]-()
+DELETE rS,r,rr,vEI,r2"""
+    val result = session.run(script)
+    session.close()
+    driver.close()
+  }
+  
   def insertarResultados(total:Int,
       carros:Int,
       motos:Int,
