@@ -137,11 +137,11 @@ object Simulacion extends Runnable {
         //se crea la instancia de vehiculo segun el caso
         val letras = Array("A", "B", "C", "D", "E", "F", "G", "Z", "X", "Y", "T")
         indice match {
-          case 0 => vehiculo = new Carro(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
-          case 1 => vehiculo = new Moto(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
-          case 2 => vehiculo = new Bus(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
-          case 3 => vehiculo = new Camion(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
-          case 4 => vehiculo = new MotoTaxi(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera)
+          case 0 => vehiculo = new Carro(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera, velocidad_primera.magnitud, random.nextInt())
+          case 1 => vehiculo = new Moto(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera, velocidad_primera.magnitud, random.nextInt())
+          case 2 => vehiculo = new Bus(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera, velocidad_primera.magnitud, random.nextInt())
+          case 3 => vehiculo = new Camion(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera, velocidad_primera.magnitud, random.nextInt())
+          case 4 => vehiculo = new MotoTaxi(s"${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}${letras(random.nextInt(letras.size - 1))}-${random.nextInt(9)}${random.nextInt(9)}", new Punto(inicio.x, inicio.y), velocidad_primera, velocidad_primera.magnitud, random.nextInt())
         }
 
         vehiculos += vehiculo
@@ -189,7 +189,13 @@ object Simulacion extends Runnable {
       var camino_actual = caminos.get(vehiculo_actual).get //obtiene el camino asociado al vehiculo
       if (!camino_actual.isEmpty) {
         var via_fin = camino_actual.front.fin //obtiene la primera via y su punto final
-
+        
+        var via_actual = camino_actual.front//obtiene la via actual
+        
+        var pasa = via_actual.semaforo.sePuedePasar(vehiculo_actual.velocidad.magnitud)//pregunta si el vehiculo pasa o no con la velocidad que tiene y los tiempos de los nodos de los semaforos
+        //es decir si va a estar en rojo cuando el este pasando por ahí con la velocidad que tiene,
+        
+        
         //si entra al radio de la interseccion final de la via:
         if ((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y), 2)) <= radioPermitido * radioPermitido) {
           vehiculo_actual.posicion.x_=(via_fin.x)
@@ -202,12 +208,28 @@ object Simulacion extends Runnable {
             //crea una nueva velocidad para el vehiculo basandose en la nueva via
             var nueva_velocidad = cambioVelocidad(camino_actual.front)
             vehiculo_actual.velocidad_=(nueva_velocidad)
-            vehiculo_actual.mover(dt)
+            //vehiculo_actual.mover(dt)
           }
 
         } else {
           vehiculo_actual.velocidad.direccion_=(camino_actual.front.angulo)
-          vehiculo_actual.mover(dt)
+          //vehiculo_actual.mover(dt)
+        }
+        
+        //Mover y desicion de si mover pa donde y cuando desacelerar o acelerar
+        
+        //rango permitido para que se aproxime a la distancia de frenado(, es decir, margen de error)
+        val rangoPermitido = 10 
+        
+        if(pasa){
+          vehiculo_actual.mover(dt,0)
+        } else {
+          if((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y),2)<=(vehiculo_actual.distanciaFrenado+rangoPermitido)*(vehiculo_actual.distanciaFrenado+rangoPermitido)) ){
+            vehiculo_actual.mover(dt,-1)
+          }else{
+            vehiculo_actual.mover(dt,0)
+          }
+          
         }
       } else {
         vehiculo_actual.velocidad.magnitud_=(0)
