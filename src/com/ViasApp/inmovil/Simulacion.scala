@@ -70,6 +70,24 @@ object Simulacion extends Runnable {
 //  
  //--------------------------------------------------------------------------------
   
+   
+  //NODOS
+  val nodos:Array[Nodo] = Array()
+  
+  
+  //sé que es ineficiente guardar un tiempo dentro de cada clase pero en estos momentos ya ni pienso alv
+  
+  def cambioSemaforo(dt:Int){
+    for(i <- nodos){
+      i.procesoDeCambioSemaforos(dt)
+    }
+  }
+  
+  
+  
+  
+  
+ //--------------------------------------------------------------------------------
   GrafoVias.construir(vias) //crea el grafo de las vias
 
   val grafico = new Grafico()
@@ -319,6 +337,7 @@ object Simulacion extends Runnable {
 
         //metodo para mover y controlar la logica de los vehiculos
         controlDeRutas(dt)
+        cambioSemaforo(dt)
         t += dt
       }
       Thread.sleep(tRefresh.toLong)
