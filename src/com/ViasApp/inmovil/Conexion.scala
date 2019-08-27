@@ -129,7 +129,7 @@ object Conexion {
       //recorta solo el nombre utilizado en scala (Carro, Moto, etc)
       var clase = classe.substring(classe.lastIndexOf("com.ViasApp")+18, classe.size)
       
-      script+=s"(vehiculo$cont:${clase}{pla:'${x.v.placa}',x:${x.v.posicion.x},y:${x.v.posicion.y},mag:${x.v.velocidad.magnitud},dir:${x.v.velocidad.direccion.valor}}),\n"
+      script+=s"(vehiculo$cont:${clase}{pla:'${x.v.placa}',x:${x.v.posicion.x},y:${x.v.posicion.y},mag:${x.v.velocidad.magnitud},dir:${x.v.velocidad.direccion.valor}, velocidadAuto:${x.v.velocidadAuto}, aceleracion:${x.v.aceleracion}}),\n"
       script+=s"(:Ruta{size:${x.ruta.size},"
       x.ruta.foreach(y => {
         //Clave: origenX-origenY-finX-finY
@@ -167,15 +167,17 @@ object Conexion {
       val velocidad = new Velocidad(Vnode.get("mag").asDouble(), new Angulo(Vnode.get("dir").asDouble()))
       val posicion = new Punto(Vnode.get("x").asDouble(), Vnode.get("y").asDouble())
       val placa = Vnode.get("pla").asString()
+      val velocidadAuto = Vnode.get("velocidadAuto").asDouble()
+      val aceleracion = Vnode.get("aceleracion").asInt()
 
       //vehiculo generico para luego hacer el matching
-      var vehiculo: Vehiculo = new Vehiculo("k", new Punto(1, 1), new Velocidad(1, new Angulo(0))) {}
+      var vehiculo: Vehiculo = new Vehiculo("k", new Punto(1, 1), new Velocidad(1, new Angulo(0)), 0,0) {}
       clase match {
-        case "Bus"      => vehiculo = new Bus(placa, posicion, velocidad)
-        case "Carro"    => vehiculo = new Carro(placa, posicion, velocidad)
-        case "Moto"     => vehiculo = new Moto(placa, posicion, velocidad)
-        case "Camion"   => vehiculo = new Camion(placa, posicion, velocidad)
-        case "MotoTaxi" => vehiculo = new MotoTaxi(placa, posicion, velocidad)
+        case "Bus"      => vehiculo = new Bus(placa, posicion, velocidad, velocidadAuto, aceleracion)
+        case "Carro"    => vehiculo = new Carro(placa, posicion, velocidad,velocidadAuto, aceleracion)
+        case "Moto"     => vehiculo = new Moto(placa, posicion, velocidad,velocidadAuto, aceleracion)
+        case "Camion"   => vehiculo = new Camion(placa, posicion, velocidad,velocidadAuto, aceleracion)
+        case "MotoTaxi" => vehiculo = new MotoTaxi(placa, posicion, velocidad,velocidadAuto, aceleracion)
       }
       //Rnode = nodo de la ruta
       val Rnode = valores.get(2)
