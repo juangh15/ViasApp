@@ -4,12 +4,12 @@ import scala.collection.mutable.ArrayBuffer
 
 
 
-class Nodo(val id: Int,val semaforos: ArrayBuffer[Semaforo], var funcionar:Boolean=true ) {
+class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo], val tiempoAmarillo: Int = 0 , var funcionar:Boolean=true) {
     //Tiempo en amarillo es estandar para todos
   var tiempo:Int=0
-  val ta:Int=2//nùmero estandar
+  val ta:Int=tiempoAmarillo
   
-  val tiempoTotal = {var ñ=0;for(i <- semaforos){ñ=ñ+i.tv};ñ}+ta*(semaforos.length)
+  val tiempoTotal = {var ñ=0;for(i <- semaforos){ñ=ñ+i.tv.toInt};ñ}+ta*(semaforos.length)
   
   
   //estados iniciales
