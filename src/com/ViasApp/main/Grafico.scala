@@ -177,9 +177,11 @@ class Grafico {
         }
         else if (e.getKeyCode == KeyEvent.VK_F1) {
           println("cargar simulacion de la base de datos en neo")
+          Simulacion.estadoSimulacion = 4
         }
         else if (e.getKeyCode == KeyEvent.VK_F2) {
           println("detener y guardar simulacion tal cual en neo")
+          Simulacion.estadoSimulacion = 3
         }
       }
       def keyReleased(e: KeyEvent) {
