@@ -26,7 +26,7 @@ class Nodo(val id: Int,val semaforos: ArrayBuffer[Semaforo], var funcionar:Boole
       tiempo=tiempo-tiempoTotal
     }
     
-    var sumatory:Int=semaforos(0).tv
+    var sumatory:Int=semaforos(0).tv.toInt
     var condicion =(tiempo<=sumatory)
     var cont=0
     var cosa=false
@@ -37,7 +37,7 @@ class Nodo(val id: Int,val semaforos: ArrayBuffer[Semaforo], var funcionar:Boole
         cosa=false
         cont+=1
       }else{
-        sumatory+=semaforos(cont).tv
+        sumatory+=semaforos(cont).tv.toInt
         cosa=true
       }
       condicion=(tiempo<=sumatory)      
