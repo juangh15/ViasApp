@@ -1,10 +1,12 @@
 package com.ViasApp.inmovil
+
 import org.neo4j.driver.v1._
 import scala.collection.mutable.ArrayBuffer
 import com.ViasApp.movimiento._
 import com.ViasApp.movil._
 import scalax.collection.mutable.ArraySet
 import scala.collection.mutable.Queue
+import com.ViasApp.JsonClasses.ResultadosParaSimulacion
 
 object Conexion {
 
@@ -219,5 +221,101 @@ object Conexion {
     driver.close()
     viajes
   }
-
+  
+  def getResultadosSimulacion():ResultadosParaSimulacion = {
+    val (driver, session) = getSession()
+    val script = s"""MATCH (rS:ResultadosSimulacion),
+(rS)-[:VEHICULOS]->(v:Vehiculos),
+(rS)-[:MALLAVIAL]->(mV:mallaVial),
+(mV)-[:VEHICULOSENINTERSECCION]->(vEI:vehiculosEnInterseccion),
+(rS)-[:TIEMPOS]->(t:Tiempos),
+(rS)-[:VELOCIDADES]->(vel:Velocidades),
+(rS)-[:DISTANCIAS]->(d:Distancias),
+(rS)-[:COMPARENDOS]->(c:Comparendos)
+RETURN v,mV,vEI,t,vel,d,c"""
+    val result = session.run(script)
+    val nodo = result.next().values()
+    val v = nodo.get(0)
+    val mV = nodo.get(1)
+    val vEI = nodo.get(2)
+    val t = nodo.get(3)
+    val vel = nodo.get(4)
+    val d = nodo.get(5)
+    val c = nodo.get(6)
+    val rPS = new ResultadosParaSimulacion(
+      v.get("total").asInt(),
+      v.get("carros").asInt(),
+      v.get("motos").asInt(),
+      v.get("buses").asInt(),
+      v.get("camiones").asInt(),
+      v.get("motoTaxis").asInt(),
+      mV.get("vias").asInt(),
+      mV.get("intersecciones").asInt(),
+      mV.get("viasUnSentido").asInt(),
+      mV.get("viasDobleSentido").asInt(),
+      mV.get("velocidadMinima").asInt(),
+      mV.get("velocidadMaxima").asInt(),
+      mV.get("longitudPromedio").asInt(),
+      vEI.get("promedioOrigen").asInt(),
+      vEI.get("promedioDestino").asInt(),
+      vEI.get("sinOrigen").asInt(),
+      vEI.get("sinDestino").asInt(),
+      t.get("simulacion").asInt(),
+      t.get("realidad").asInt(),
+      vel.get("minima").asInt(),
+      vel.get("maxima").asInt(),
+      vel.get("promedio").asInt(),
+      d.get("minima").asInt(),
+      d.get("maxima").asInt(),
+      d.get("promedio").asInt(),
+      c.get("cantidad").asInt(),
+      c.get("promedioPorcentajeExceso").asInt())
+    session.close()
+    driver.close()
+    rPS
+  }
+  
+  def insertarResultados(total:Int,
+      carros:Int,
+      motos:Int,
+      buses:Int,
+      camiones:Int,
+      motoTaxis:Int,
+      vias:Int,
+      intersecciones:Int,
+      viasUnSentido:Int,
+      viasDobleSentido:Int,
+      velocidadMinima:Int,
+      velocidadMaxima:Int,
+      longitudPromedio:Int,
+      promedioOrigen:Int,
+      promedioDestino:Int,
+      sinOrigen:Int,
+      sinDestino:Int,
+      simulacion:Int,
+      realidad:Int,
+      minima:Int,
+      maxima:Int,
+      promedio:Int,
+      minima2:Int,
+      maxima2:Int,
+      promedio2:Int,
+      cantidad:Int,
+      promedioPorcentajeExceso:Int) = {
+    val (driver, session) = getSession()
+    val script = s"""
+      CREATE (rS:ResultadosSimulacion),
+(rS)-[:VEHICULOS]->(v:Vehiculos{total:$total,carros:$carros ,motos:$motos ,buses:$buses ,camiones: $camiones,motoTaxis: $motoTaxis}),
+(rS)-[:MALLAVIAL]->(mV:mallaVial{vias: $vias,intersecciones: $intersecciones,viasUnSentido:$viasUnSentido,viasDobleSentido: $viasDobleSentido,velocidadMinima: $velocidadMinima,velocidadMaxima: $velocidadMaxima,longitudPromedio: $longitudPromedio}),
+(mV)-[:VEHICULOSENINTERSECCION]->(vEI:vehiculosEnInterseccion{promedioOrigen: $promedioOrigen,promedioDestino: $promedioDestino,sinOrigen: $sinOrigen,sinDestino: $sinDestino}),
+(rS)-[:TIEMPOS]->(t:Tiempos{simulacion: $simulacion,realidad: $realidad}),
+(rS)-[:VELOCIDADES]->(vel:Velocidades{minima: $minima,maxima: $maxima,promedio: $promedio}),
+(rS)-[:DISTANCIAS]->(d:Distancias{minima: $minima2,maxima: $maxima2,promedio: $promedio2}),
+(rS)-[:COMPARENDOS]->(c:Comparendos{cantidad: $cantidad,promedioPorcentajeExceso: $promedioPorcentajeExceso})
+      """
+    
+    val result = session.run(script)
+    session.close()
+    driver.close()
+  }
 }
