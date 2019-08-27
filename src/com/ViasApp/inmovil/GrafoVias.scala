@@ -14,10 +14,7 @@ object GrafoVias {
     vias.foreach(via_actual => {
 
       grafo.add(WLDiEdge(via_actual.origen, via_actual.fin)(via_actual.longitud, via_actual))
-      if (via_actual.sentido.nombre == "dobleVia") {
-        var viadoble = new Via(via_actual.fin, via_actual.origen,via_actual.velocidad, via_actual.tipovia, via_actual.sentido, via_actual.numero, via_actual.nombre)
-        grafo.add(WLDiEdge(viadoble.origen, viadoble.fin)(viadoble.longitud, viadoble))
-      }
+
     })
   }
 
