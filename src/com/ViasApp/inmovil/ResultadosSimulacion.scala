@@ -4,25 +4,31 @@ import com.ViasApp.movimiento._
 import com.ViasApp.inmovil._
 import com.ViasApp.movil._
 
-class ResultadosSimulacion(totalVehiculos : Int, totalCarros : Int, totalMotos : Int, totalBuses : Int,totalCamiones : Int, totalMototaxis : Int,
-    vias : Array[Via], intersecciones : Array[Interseccion], vehiculos: Array[Vehiculo], tiempo: Double){
+class ResultadosSimulacion(val totalVehiculos : Int, val totalCarros : Int, val totalMotos : Int, val totalBuses : Int, val totalCamiones : Int, val totalMototaxis : Int,
+  val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: Array[Vehiculo],val  tiempo: Double){
   
-  val tipoVias = vias.map(_.tipovia)
-  var conteo1 = 0
-  val unaVia = {
-    for(x <- vias){
-      if(x.nombre == "unaVia"){
-        conteo1 = conteo1 + 1
+  var aux1 = 0
+  var aux2 = 0
+  var intersecciones = arrayIntersecciones.size
+  var viasUnSentido = {
+    for( x <- arrayVias ){
+      if(x.sentido.nombre == "unaVia"){
+        aux1+=1
       }
     }
+    aux1
   }
-  var conteo2 = 0
-  val dobleVia = {
-    for(x <- vias){
-      if(x.nombre == "dobleVia"){
-        conteo2 = conteo2 + 1
+  var viasDobleSentido = {
+    for( x <- arrayVias ){
+      if(x.sentido.nombre == "dobleVia"){
+        aux2+=1
       }
     }
+    aux2/2
   }
+  var vias = viasUnSentido + viasDobleSentido
+  
+  var longitudpromedio = (arrayVias.map(_.longitud).sum)/arrayVias.size
+
   
 }
