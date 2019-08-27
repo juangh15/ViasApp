@@ -52,9 +52,11 @@ object Simulacion extends Runnable {
 //fin de lectura variables del JSON-------------------------------------------------------
   
   
-  //NEO4J --------------------------
+   //NEO4J --------------------------
 
-  //   val (vias, intersecciones) = Conexion.getVias
+  //   val (vias1, intersecciones) = Conexion.getVias
+  
+  //   val vias = viasDobles(vias1)
 
   //----------------------------------
 
@@ -66,16 +68,33 @@ object Simulacion extends Runnable {
 
   val intersecciones = Array(niquia, lauraAuto, lauraReg, ptoCero, mino, villa, ig65, robledo, colReg, col65, col80, juanOr, maca, expo, reg30, monte, agua, viva, mayor, ferrCol, ferrJuan, sanDiego, premium, pp, santafe, pqEnv, juan65, juan80, _33_65, bule, gema, _30_65, _30_70, _30_80, bol65, gu10, terminal, gu30, gu80, _65_80, gu_37S)
 
-  val vias = Array(
+  val vias1 = Array(
     new Via(niquia, lauraAuto, 80, TipoVia("Carrera"), Sentido.dobleVia, "64C", Some("Auto Norte")), new Via(niquia, lauraReg, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(lauraAuto, lauraReg, 60, TipoVia("Calle"), Sentido.dobleVia, "94", Some("Pte Madre Laura")), new Via(lauraAuto, ptoCero, 80, TipoVia("Carrera"), Sentido.dobleVia, "64C", Some("Auto Norte")), new Via(lauraReg, ptoCero, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(ptoCero, mino, 60, TipoVia("Calle"), Sentido.dobleVia, "58", Some("Oriental")), new Via(mino, villa, 60, TipoVia("Calle"), Sentido.dobleVia, "58", Some("Oriental")), new Via(ptoCero, ig65, 60, TipoVia("Calle"), Sentido.dobleVia, "55", Some("Iguaná")), new Via(ig65, robledo, 60, TipoVia("Calle"), Sentido.dobleVia, "55", Some("Iguaná")), new Via(ptoCero, colReg, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(colReg, maca, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(maca, expo, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(expo, reg30, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(reg30, monte, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(monte, agua, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(agua, viva, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")),
     new Via(viva, mayor, 80, TipoVia("Carrera"), Sentido.dobleVia, "62", Some("Regional")), new Via(mino, ferrCol, 60, TipoVia("Carrera"), Sentido.dobleVia, "55", Some("Ferrocarril")), new Via(ferrCol, ferrJuan, 60, TipoVia("Carrera"), Sentido.dobleVia, "55", Some("Ferrocarril")), new Via(ferrJuan, expo, 60, TipoVia("Carrera"), Sentido.dobleVia, "55", Some("Ferrocarril")), new Via(villa, juanOr, 60, TipoVia("Carrera"), Sentido.dobleVia, "46", Some("Oriental")), new Via(juanOr, sanDiego, 60, TipoVia("Carrera"), Sentido.dobleVia, "46", Some("Oriental")), new Via(sanDiego, premium, 60, TipoVia("Carrera"), Sentido.dobleVia, "43A", Some("Av Pob")), new Via(premium, pp, 60, TipoVia("Carrera"), Sentido.dobleVia, "43A", Some("Av Pob")), new Via(pp, santafe, 60, TipoVia("Carrera"), Sentido.dobleVia, "43A", Some("Av Pob")), new Via(santafe, pqEnv, 60, TipoVia("Carrera"), Sentido.dobleVia, "43A", Some("Av Pob")), new Via(pqEnv, mayor, 60, TipoVia("Carrera"), Sentido.dobleVia, "43A", Some("Av Pob")), new Via(ferrCol, colReg, 60, TipoVia("Calle"), Sentido.dobleVia, "450", Some("Colombia")), new Via(colReg, col65, 60, TipoVia("Calle"), Sentido.dobleVia, "450", Some("Colombia")), new Via(col65, col80, 60, TipoVia("Calle"), Sentido.dobleVia, "450", Some("Colombia")), new Via(juanOr, ferrJuan, 60, TipoVia("Calle"), Sentido.dobleVia, "44", Some("Sn Juan")), new Via(ferrJuan, maca, 60, TipoVia("Calle"), Sentido.dobleVia, "44", Some("Sn Juan")), new Via(maca, juan65, 60, TipoVia("Calle"), Sentido.dobleVia, "44", Some("Sn Juan")), new Via(juan65, juan80, 60, TipoVia("Calle"), Sentido.dobleVia, "44", Some("Sn Juan")), new Via(sanDiego, expo, 60, TipoVia("Calle"), Sentido.dobleVia, "33", Some("33")), new Via(expo, _33_65, 60, TipoVia("Calle"), Sentido.dobleVia, "33", Some("33")), new Via(_33_65, bule, 60, TipoVia("Calle"), Sentido.dobleVia, "33", Some("33")), new Via(bule, gema, 60, TipoVia("Calle"), Sentido.dobleVia, "33", Some("33")), new Via(premium, reg30, 60, TipoVia("Calle"), Sentido.dobleVia, "30", Some("30")), new Via(reg30, _30_65, 60, TipoVia("Calle"), Sentido.dobleVia, "30", Some("30")), new Via(_30_65, _30_70, 60, TipoVia("Calle"), Sentido.dobleVia, "30", Some("30")), new Via(_30_70, _30_80, 60, TipoVia("Calle"), Sentido.dobleVia, "30", Some("30")), new Via(maca, bol65, 60, TipoVia("Diagonal"), Sentido.dobleVia, "74B", Some("Boliv")), new Via(bol65, bule, 60, TipoVia("Diagonal"), Sentido.dobleVia, "74B", Some("Boliv")), new Via(bule, _30_70, 60, TipoVia("Diagonal"), Sentido.dobleVia, "74B", Some("Boliv")), new Via(juan80, bule, 60, TipoVia("Transversal"), Sentido.dobleVia, "39B", Some("Nutibara")), new Via(pp, monte, 60, TipoVia("Calle"), Sentido.dobleVia, "10", Some("10")), new Via(monte, gu10, 60, TipoVia("Calle"), Sentido.dobleVia, "10", Some("10")), new Via(gu10, terminal, 60, TipoVia("Calle"), Sentido.dobleVia, "10", Some("10")), new Via(expo, gu30, 60, TipoVia("Carrera"), Sentido.dobleVia, "52", Some("Av Guay")), new Via(gu30, gu10, 60, TipoVia("Carrera"), Sentido.dobleVia, "52", Some("Av Guay")), new Via(gu10, gu80, 60, TipoVia("Carrera"), Sentido.dobleVia, "52", Some("Av Guay")), new Via(gu80, gu_37S, 60, TipoVia("Carrera"), Sentido.dobleVia, "52", Some("Av Guay")), new Via(lauraAuto, ig65, 60, TipoVia("Carrera"), Sentido.dobleVia, "65", Some("65")), new Via(ig65, col65, 60, TipoVia("Carrera"), Sentido.dobleVia, "65", Some("65")), new Via(juan65, col65, 60, TipoVia("Carrera"), Sentido.unaVia, "65", Some("65")), new Via(bol65, juan65, 60, TipoVia("Carrera"), Sentido.unaVia, "65", Some("65")), new Via(_33_65, bol65, 60, TipoVia("Carrera"), Sentido.unaVia, "65", Some("65")), new Via(_30_65, _33_65, 60, TipoVia("Carrera"), Sentido.unaVia, "65", Some("65")), new Via(_30_65, terminal, 60, TipoVia("Carrera"), Sentido.dobleVia, "65", Some("65")), new Via(terminal, _65_80, 60, TipoVia("Carrera"), Sentido.dobleVia, "80", Some("65")), new Via(robledo, col80, 60, TipoVia("Carrera"), Sentido.dobleVia, "80", Some("80")), new Via(col80, juan80, 60, TipoVia("Carrera"), Sentido.dobleVia, "80", Some("80")), new Via(juan80, gema, 60, TipoVia("Carrera"), Sentido.dobleVia, "80", Some("80")), new Via(gema, _30_80, 60, TipoVia("Carrera"), Sentido.dobleVia, "80", Some("80")), new Via(_30_80, _65_80, 60, TipoVia("Carrera"), Sentido.dobleVia, "80", Some("80")), new Via(_65_80, gu80, 60, TipoVia("Carrera"), Sentido.dobleVia, "80", Some("80")), new Via(gu80, agua, 60, TipoVia("Carrera"), Sentido.dobleVia, "80", Some("80")), new Via(agua, santafe, 60, TipoVia("Calle"), Sentido.dobleVia, "12S", Some("80")), new Via(viva, pqEnv, 60, TipoVia("Calle"), Sentido.dobleVia, "37S", Some("37S")),
     new Via(viva, gu_37S, 60, TipoVia("Calle"), Sentido.dobleVia, "63", Some("37S")));
 
+  val vias = viasDobles(vias1)
+
   //--------------------------------------------------------------------------------
 
-  //NODOS
-  val nodos: Array[Nodo] = Array()
+    //DOBLES VIAS----------------
+  def viasDobles(vias2: Array[Via]) = {
+    val vias3 = ArrayBuffer.empty[Via]
+    vias2.foreach(via => {
+      vias3 += via
+      if (via.sentido.nombre == "dobleVia") {
+        var via_nueva = new Via(via.fin, via.origen, via.velocidad, via.tipovia, via.sentido, via.numero, via.nombre)
+        vias3 += via_nueva
+      }
+    })
+    vias3.toArray[Via]
+  }
 
+  //-----------------
+  
+  //NODOS
+  val nodos: Array[Nodo] = crearSemaforos(intersecciones, vias, minTiempoVerde, maxTiempoVerde, tiempoAmarillo).values.toArray[Nodo]
+  println("tamaño semaforos: " + nodos.size)
   //sé que es ineficiente guardar un tiempo dentro de cada clase pero en estos momentos ya ni pienso alv
 
   def cambioSemaforo(dt: Int) {
@@ -83,6 +102,29 @@ object Simulacion extends Runnable {
       i.procesoDeCambioSemaforos(dt)
     }
   }
+  
+  //crear semaforos por primera vez------------------------------------
+  def crearSemaforos(intersecciones2: Array[Interseccion], vias2: Array[Via], minVerde: Int, maxVerde: Int, tiempoAmarillo: Int): scala.collection.mutable.Map[Interseccion, Nodo] = {
+
+    var nodos_semaforos = scala.collection.mutable.Map[Interseccion, ArrayBuffer[Semaforo]]()
+    intersecciones2.foreach(x => { nodos_semaforos += (x -> new ArrayBuffer[Semaforo]()) })
+
+    vias2.foreach(via => {
+      val tiempoVerde = minVerde + random.nextInt(maxVerde) + 1
+      var semaforo = new Semaforo((s"${((via.origen.x) / 100).toInt}${((via.origen.y) / 100).toInt}${((via.fin.x) / 100).toInt}${((via.fin.y) / 100).toInt}").toLong, 0, tiempoVerde)
+
+      var arraySemaforos = nodos_semaforos.get(via.fin)
+      if (arraySemaforos.isDefined) {
+        arraySemaforos.get += semaforo
+      }
+    })
+
+    var nodos_totales = scala.collection.mutable.Map[Interseccion, Nodo]()
+    nodos_semaforos.keySet.foreach(x => { nodos_totales += (x -> new Nodo(x, nodos_semaforos(x), tiempoAmarillo)) })
+    nodos_totales
+  }
+
+  //------------------------------------------------------------------
 
   //--------------------------------------------------------------------------------
   GrafoVias.construir(vias) //crea el grafo de las vias
