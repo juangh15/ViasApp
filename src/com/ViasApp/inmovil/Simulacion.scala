@@ -152,6 +152,7 @@ object Simulacion extends Runnable {
   var vehiculos = new ArrayBuffer[Vehiculo]() //todos los vehiculos de la simulacion
   var interOrigen = new ArrayBuffer[Interseccion]() //todos los vehiculos de la simulacion
   var interDestino = new ArrayBuffer[Interseccion]() //todos los vehiculos de la simulacion
+  var distanciaRecorrida = new ArrayBuffer[Double]() // distancia recorrida por cada vehiculo
 
   //VIAJES-----------------------------
 
@@ -208,6 +209,7 @@ object Simulacion extends Runnable {
           println("no ruta generada")
         } else {
           camino.foreach(x => println(x.origen + " > " + x.fin + "\n"))
+          distanciaRecorrida += camino.map(_.longitud).reduce(_ + _)
         }
 
         var velocidad_primera = cambioVelocidad(camino.front)
