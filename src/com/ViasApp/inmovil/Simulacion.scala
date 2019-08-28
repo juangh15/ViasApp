@@ -288,7 +288,17 @@ object Simulacion extends Runnable {
         var via_fin = camino_actual.front.fin //obtiene la primera via y su punto final
 
         var via_actual = camino_actual.front //obtiene la via actual
-        var pasa = via_actual.semaforo.sePuedePasar(vehiculo_actual.velocidad.magnitud , vehiculo_actual.aceleracion) //pregunta si el vehiculo pasa o no con la velocidad que tiene y los tiempos de los nodos de los semaforos
+        var nodok:Nodo = {
+          var cont=0
+          while(nodos(cont).posicion != via_actual.fin){
+            cont+=1
+          }
+          nodos(cont)
+        }
+        
+        var pasa = nodok.sePuedePasar(vehiculo_actual.velocidad.magnitud , vehiculo_actual.aceleracion, vehiculo_actual.distanciaFrenado, via_actual.semaforo.id) //pregunta si el vehiculo pasa o no con la velocidad que tiene y los tiempos de los nodos de los semaforos
+        //es decir si va a estar en rojo cuando el este pasando por ahí con la velocidad que tiene
+        
         //es decir si va a estar en rojo cuando el este pasando por ahí con la velocidad que tiene,
 
         //SI ENTRA AL RADIO DE LA INTERSECCION DE LA VIA:
@@ -320,7 +330,6 @@ object Simulacion extends Runnable {
               if(vehiculo_actual.velocidad.magnitud > camino_actual.front.velocidad){
                 comparendos += new Comparendo(vehiculo_actual, vehiculo_actual.velocidad.magnitud, camino_actual.front.velocidad)
                 cantComparendos = comparendos.size
-                println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + comparendos.size)
               }
             }
           }
@@ -347,13 +356,7 @@ object Simulacion extends Runnable {
           }
 
         } else {
-          if (vehiculo_actual.velocidad.magnitud == vehiculo_actual.velocidadAuto) {
-            if ((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y), 2) <= (vehiculo_actual.distFrenadoEstatica + rangoPermitido) * (vehiculo_actual.distFrenadoEstatica + rangoPermitido))) {
-              vehiculo_actual.mover(dt, -1)
-            } else {
-              vehiculo_actual.mover(dt, 0)
-            }
-          }else if ((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y), 2) <= (vehiculo_actual.distanciaFrenado + rangoPermitido) * (vehiculo_actual.distanciaFrenado + rangoPermitido))) {
+          if ((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y), 2) <= (vehiculo_actual.distanciaFrenado + rangoPermitido) * (vehiculo_actual.distanciaFrenado + rangoPermitido))) {
             vehiculo_actual.mover(dt, -1)
           } else {
             vehiculo_actual.mover(dt, 0)
