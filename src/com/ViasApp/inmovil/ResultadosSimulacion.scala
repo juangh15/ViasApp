@@ -46,5 +46,11 @@ class ResultadosSimulacion(val totalVehiculos : Int, val totalCarros : Int, val 
   
   var sinDestino = arrayIntersecciones.size - interDestino.distinct.size
   
+  var velmaxveh = arrayVehiculos.map(_.velocidad.magnitud).max //Velocidad máxima de los vehiculos
+  
+  var velminveh = arrayVehiculos.map(_.velocidad.magnitud).min //Velocidad minima de los vehiculos
+  
+  var velpromveh = arrayVehiculos.map(_.velocidad.magnitud).sum/arrayVehiculos.size  //Velocidad promedio de los vehiculos
+  
   
 }
