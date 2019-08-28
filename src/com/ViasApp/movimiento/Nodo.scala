@@ -33,7 +33,7 @@ class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo],tiemp
           if (semaforos.apply(i).id==g){cont = i}
           cont
             }
-    semaforos(cont)
+    semaforos(cont).tv
   }
   def sePuedePasar(v:Double, a:Double, d:Double = 0.0, id:Long): Boolean = {
     var t:Int=0
