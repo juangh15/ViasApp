@@ -119,7 +119,7 @@ object Conexion {
     //borra los viajes antes de insertar nuevos
   def borrarViajes(){
     val (driver, session) = getSession()
-    val script = "MATCH (N)-[:ENRUTADO]->(Ruta1)\nWHERE (N:Carro) or (N:Bus) or (N:Camion) or (N:Moto) or (N:MotoTaxi)\nRETURN (N), (Ruta1)"
+    val script = "MATCH (N)-[:ENRUTADO]->(Ruta1)\nWHERE (N:Carro) or (N:Bus) or (N:Camion) or (N:Moto) or (N:MotoTaxi)\nDETACH DELETE (N), (Ruta1)"
     val result = session.run(script)
     session.close()
     driver.close()
