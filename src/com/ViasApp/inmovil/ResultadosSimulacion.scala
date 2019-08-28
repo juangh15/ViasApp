@@ -4,8 +4,7 @@ import com.ViasApp.movimiento._
 import com.ViasApp.inmovil._
 import com.ViasApp.movil._
 
-class ResultadosSimulacion(val totalVehiculos : Int, val totalCarros : Int, val totalMotos : Int, val totalBuses : Int, val totalCamiones : Int, val totalMototaxis : Int,
-  val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: Array[Vehiculo],val  tiempo: Double, val interOrigen: ArrayBuffer[Interseccion], val interDestino: ArrayBuffer[Interseccion]){
+class ResultadosSimulacion(val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: Array[Vehiculo],val  tiempo: Double, val interOrigen: ArrayBuffer[Interseccion], val interDestino: ArrayBuffer[Interseccion]){
   
   var aux1 = 0
   var aux2 = 0
