@@ -115,7 +115,16 @@ object Conexion {
 
     (vias.toArray[Via], intersecciones.toArray[Interseccion])
   }
-
+  
+    //borra los viajes antes de insertar nuevos
+  def borrarViajes(){
+    val (driver, session) = getSession()
+    val script = "MATCH (N)-[:ENRUTADO]->(Ruta1)\nWHERE (N:Carro) or (N:Bus) or (N:Camion) or (N:Moto) or (N:MotoTaxi)\nRETURN (N), (Ruta1)"
+    val result = session.run(script)
+    session.close()
+    driver.close()
+  }
+  //inserta los viajes 
   def insertarViajes(viajes:ArrayBuffer[Viaje]){
     val (driver, session) = getSession()
     var script:String = "CREATE "
