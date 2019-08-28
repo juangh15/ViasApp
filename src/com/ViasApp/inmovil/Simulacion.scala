@@ -430,11 +430,15 @@ object Simulacion extends Runnable {
             cantidadMotos,
             cantidadBuses,
             cantidadCamiones,
-            cantidadMototaxis, resultadosSim.vias, resultadosSim.intersecciones, resultadosSim.viasUnSentido, resultadosSim.viasDobleSentido, 
-            resultadosSim.velminvias, resultadosSim.velmaxvias , resultadosSim.longitudpromedio, resultadosSim.promedioOrigen, resultadosSim.promedioDestino, 
+          cantidadMototaxis, resultadosSim.vias, resultadosSim.intersecciones, resultadosSim.viasUnSentido, resultadosSim.viasDobleSentido, 
+            resultadosSim.velminvias, resultadosSim.velmaxvias , resultadosSim.longitudpromedio, resultadosSim.promedioOrigen.toInt, resultadosSim.promedioDestino.toInt, 
             resultadosSim.sinOrigen, resultadosSim.sinDestino, resultadosSim.tiempo.toInt, 50, resultadosSim.velminveh.toInt, resultadosSim.velmaxveh.toInt, 
             resultadosSim.velpromveh.toInt, resultadosSim.distanciaMin.toInt, resultadosSim.distanciaMax.toInt, resultadosSim.distanciaProm.toInt, comparendos.size, promedioComparendos.toInt)
-
+          
+          distanciaRecorrida.clear
+          interOrigen.clear
+          interDestino.clear
+          comparendos.clear
         }
 
         
