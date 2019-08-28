@@ -11,7 +11,25 @@ class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo], val 
   
   val tiempoTotal = {var ñ=0;for(i <- semaforos){ñ=ñ+i.tv.toInt};ñ}+ta*(semaforos.length)
   
-  
+  val tiempoSemaforo=(g:Long)=>{//tiempo para que se ponga en verde del semaforo con id g
+    var cont=0;
+    
+    val h ={
+      var ñ=0
+      while(semaforos(cont).id!=g){
+        ñ=ñ+semaforos(cont).tv.toInt
+        cont+=1
+      }
+      ñ
+    }
+    val ti = h+ta*(cont-1)
+    var tf:Int=0
+    if(tiempo<=ti) tf=ti-tiempo
+    else tf=tiempoTotal-tiempo+ti
+    tf
+  }
+    
+    
   //estados iniciales
   for(i <- semaforos){
     i.estado=2
