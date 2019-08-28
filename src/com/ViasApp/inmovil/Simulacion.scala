@@ -287,8 +287,7 @@ object Simulacion extends Runnable {
         var via_fin = camino_actual.front.fin //obtiene la primera via y su punto final
 
         var via_actual = camino_actual.front //obtiene la via actual
-
-        var pasa = via_actual.semaforo.sePuedePasar(vehiculo_actual.velocidad.magnitud) //pregunta si el vehiculo pasa o no con la velocidad que tiene y los tiempos de los nodos de los semaforos
+        var pasa = via_actual.semaforo.sePuedePasar(vehiculo_actual.velocidad.magnitud , vehiculo_actual.aceleracion) //pregunta si el vehiculo pasa o no con la velocidad que tiene y los tiempos de los nodos de los semaforos
         //es decir si va a estar en rojo cuando el este pasando por ahí con la velocidad que tiene,
 
         //SI ENTRA AL RADIO DE LA INTERSECCION DE LA VIA:
