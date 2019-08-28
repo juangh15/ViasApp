@@ -150,6 +150,8 @@ object Simulacion extends Runnable {
   var fin: Interseccion = _ //cada interseccion final instanciada
   var vehiculo: Vehiculo = _ //cada vehiculo instanciado
   var vehiculos = new ArrayBuffer[Vehiculo]() //todos los vehiculos de la simulacion
+  var interOrigen = new ArrayBuffer[Interseccion]() //todos los vehiculos de la simulacion
+  var interDestino = new ArrayBuffer[Interseccion]() //todos los vehiculos de la simulacion
 
   //VIAJES-----------------------------
 
@@ -184,11 +186,12 @@ object Simulacion extends Runnable {
         println("------------------------------------------------------------")
         //obtiene intersecciones aleatorias para el inicio y el final del camino
         inicio = intersecciones(random.nextInt(limIndex))
-
+        interOrigen += inicio
         while (control == false) {
           fin = intersecciones(random.nextInt(limIndex))
           if (fin != inicio) {
             control = true
+            interDestino += fin
           }
         }
         control = false
