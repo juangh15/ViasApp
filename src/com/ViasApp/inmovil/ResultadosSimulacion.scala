@@ -53,3 +53,4 @@ class ResultadosSimulacion( val  arrayVias : Array[Via], val arrayIntersecciones
   
   var distanciaMin = distancias.min
   
+}
