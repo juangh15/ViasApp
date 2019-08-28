@@ -5,10 +5,14 @@ import com.ViasApp.inmovil._
 import com.ViasApp.movil._
 
 class ResultadosSimulacion(val totalVehiculos : Int, val totalCarros : Int, val totalMotos : Int, val totalBuses : Int, val totalCamiones : Int, val totalMototaxis : Int,
-  val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: Array[Vehiculo],val  tiempo: Double){
+  val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: Array[Vehiculo],val  tiempo: Double, val interOrigen: ArrayBuffer[Interseccion], val interDestino: ArrayBuffer[Interseccion]){
   
   var aux1 = 0
   var aux2 = 0
+  var aux3 = 0
+  var aux4 = 0
+  var aux5 = 0
+  var aux6 = 0
   var intersecciones = arrayIntersecciones.size
   var viasUnSentido = {
     for( x <- arrayVias ){
@@ -33,6 +37,14 @@ class ResultadosSimulacion(val totalVehiculos : Int, val totalCarros : Int, val 
   var velmaxvias = arrayVias.map(_.velocidad).max
   
   var velminvias = arrayVias.map(_.velocidad).min
+  
+  var promedioOrigen = interOrigen.size/interOrigen.distinct.size
+  
+  var promedioDestino = interDestino.size/interDestino.distinct.size
+  
+  var sinOrigen = arrayIntersecciones.size - interOrigen.distinct.size
+  
+  var sinDestino = arrayIntersecciones.size - interDestino.distinct.size
   
   
 }
