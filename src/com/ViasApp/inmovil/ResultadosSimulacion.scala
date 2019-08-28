@@ -33,9 +33,17 @@ class ResultadosSimulacion( val  arrayVias : Array[Via], val arrayIntersecciones
   
   var velminvias = arrayVias.map(_.velocidad).min //Velocidad Minima de las vias
   
-  var promedioOrigen = interOrigen.size/interOrigen.distinct.size  //Promedio de vehiculos por nodo al inicio
+  var promedioOrigen = 0.0
   
-  var promedioDestino = interDestino.size/interDestino.distinct.size  //Promedio de vehiculos por nodo al final
+  var promedioDestino = 0.0
+  
+  if(interOrigen.size != 0){
+   promedioOrigen = interOrigen.size/interOrigen.distinct.size  //Promedio de vehiculos por nodo al inicio
+  }
+  
+  if(interDestino.size != 0){
+  promedioDestino = interDestino.size/interDestino.distinct.size  //Promedio de vehiculos por nodo al final
+  }
   
   var sinOrigen = arrayIntersecciones.size - interOrigen.distinct.size  //Nodos sin vehiculos al iniciar
   
@@ -47,10 +55,18 @@ class ResultadosSimulacion( val  arrayVias : Array[Via], val arrayIntersecciones
   
   var velpromveh = arrayVehiculos.map(_.velocidadAuto).sum/arrayVehiculos.size  //Velocidad promedio de los vehiculos
   
-  var distanciaProm = distancias.sum/arrayVehiculos.size
+  var distanciaProm = 0.0
   
-  var distanciaMax = distancias.max
+  var distanciaMax = 0.0
   
-  var distanciaMin = distancias.min
+  var distanciaMin = 0.0
   
+  if(distancias.size != 0){
+  distanciaProm = distancias.sum/arrayVehiculos.size
+  
+  distanciaMax = distancias.max
+  
+  distanciaMin = distancias.min
+  }
 }
+
