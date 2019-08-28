@@ -4,7 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 
 
 
-class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo], val tiempoAmarillo: Int = 0 , var funcionar:Boolean=true) {
+class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo],tiempoAmarillo: Int = 0 , var funcionar:Boolean=true) {
     //Tiempo en amarillo es estandar para todos
   var tiempo:Int=0
   val ta:Int=tiempoAmarillo
@@ -12,23 +12,31 @@ class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo], val 
   val tiempoTotal = {var ñ=0;for(i <- semaforos){ñ=ñ+i.tv.toInt};ñ}+ta*(semaforos.length)
   
   val tiempoSemaforo=(g:Long)=>{//tiempo para que se ponga en verde del semaforo con id g
-    var cont=0;
-    
-    val h ={
-      var ñ=0
-      while(semaforos(cont).id!=g){
-        ñ=ñ+semaforos(cont).tv.toInt
-        cont+=1
-      }
-      ñ
-    }
-    val ti = h+ta*(cont-1)
+    var cont:Int=0;
+    var h:Int ={for (i <- 0 to semaforos.size-1)
+          if (semaforos.apply(i).id==g){cont = i}
+          cont
+            }
+//      while(semaforos(cont).id!=g){
+//        ñ=ñ+semaforos(cont).tv.toInt
+//        cont+=1
+//      }
+    val ti = h+ta*(cont)
     var tf:Int=0
     if(tiempo<=ti) tf=ti-tiempo
     else tf=tiempoTotal-tiempo+ti
     tf
   }
+  def sePuedePasar(v:Double, a:Double, d:Double = 0.0, id:Long): Boolean = {
+    var t:Int=0
+    if(a==0){
+      t=(d/v).toInt
+    }else{
+      t=((-v+Math.sqrt(v*v+2*a*d))/a).toInt
+    }
+   (tiempoSemaforo(id)>= t)
     
+  }
     
   //estados iniciales
   for(i <- semaforos){
