@@ -4,14 +4,10 @@ import com.ViasApp.movimiento._
 import com.ViasApp.inmovil._
 import com.ViasApp.movil._
 
-class ResultadosSimulacion(val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: Array[Vehiculo],val  tiempo: Double, val interOrigen: ArrayBuffer[Interseccion], val interDestino: ArrayBuffer[Interseccion]){
+class ResultadosSimulacion( val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: Array[Vehiculo],val  tiempo: Double, val interOrigen: ArrayBuffer[Interseccion], val interDestino: ArrayBuffer[Interseccion], val distancias:ArrayBuffer[Double]){
   
   var aux1 = 0
   var aux2 = 0
-  var aux3 = 0
-  var aux4 = 0
-  var aux5 = 0
-  var aux6 = 0
   var intersecciones = arrayIntersecciones.size
   var viasUnSentido = {
     for( x <- arrayVias ){
@@ -29,21 +25,21 @@ class ResultadosSimulacion(val  arrayVias : Array[Via], val arrayIntersecciones 
     }
     aux2/2
   }
-  var vias = viasUnSentido + viasDobleSentido
+  var vias = viasUnSentido + viasDobleSentido //Cantidad Vias
   
-  var longitudpromedio = (arrayVias.map(_.longitud).sum)/arrayVias.size
+  var longitudpromedio = (arrayVias.map(_.longitud).sum)/arrayVias.size //Longitud promedio de las vias
 
-  var velmaxvias = arrayVias.map(_.velocidad).max
+  var velmaxvias = arrayVias.map(_.velocidad).max //Velocidad Maxima de las vias
   
-  var velminvias = arrayVias.map(_.velocidad).min
+  var velminvias = arrayVias.map(_.velocidad).min //Velocidad Minima de las vias
   
-  var promedioOrigen = interOrigen.size/interOrigen.distinct.size
+  var promedioOrigen = interOrigen.size/interOrigen.distinct.size  //Promedio de vehiculos por nodo al inicio
   
-  var promedioDestino = interDestino.size/interDestino.distinct.size
+  var promedioDestino = interDestino.size/interDestino.distinct.size  //Promedio de vehiculos por nodo al final
   
-  var sinOrigen = arrayIntersecciones.size - interOrigen.distinct.size
+  var sinOrigen = arrayIntersecciones.size - interOrigen.distinct.size  //Nodos sin vehiculos al iniciar
   
-  var sinDestino = arrayIntersecciones.size - interDestino.distinct.size
+  var sinDestino = arrayIntersecciones.size - interDestino.distinct.size //Nodos sin vehiculos al finalizar
   
   var velmaxveh = arrayVehiculos.map(_.velocidad.magnitud).max //Velocidad máxima de los vehiculos
   
@@ -51,5 +47,10 @@ class ResultadosSimulacion(val  arrayVias : Array[Via], val arrayIntersecciones 
   
   var velpromveh = arrayVehiculos.map(_.velocidad.magnitud).sum/arrayVehiculos.size  //Velocidad promedio de los vehiculos
   
+  var distanciaProm = distancias.sum/arrayVehiculos.size
+  
+  var distanciaMax = distancias.max
+  
+  var distanciaMin = distancias.min
   
 }
