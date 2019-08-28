@@ -69,6 +69,7 @@ object Simulacion extends Runnable {
        }
      })
      val comparendos = ArraySet[Comparendo]()
+     var cantComparendos:Int = 0
      //-------------------------------
 
   // PARA BORRAR CUANDO SE OBTENGAN VIAS E INTERSECCIONES DEL NEO4J-----------------------------------
@@ -318,6 +319,8 @@ object Simulacion extends Runnable {
             if((Math.pow(camino_actual.front.camara.get.distancia,2)-pos_vehiculo)<0){
               if(vehiculo_actual.velocidad.magnitud > camino_actual.front.velocidad){
                 comparendos += new Comparendo(vehiculo_actual, vehiculo_actual.velocidad.magnitud, camino_actual.front.velocidad)
+                cantComparendos = comparendos.size
+                println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + comparendos.size)
               }
             }
           }
@@ -391,6 +394,7 @@ object Simulacion extends Runnable {
           else if (vehiculo1.isInstanceOf[Camion]) { serie._4.add(vehiculo1.posicion.x, vehiculo1.posicion.y) }
           else if (vehiculo1.isInstanceOf[MotoTaxi]) { serie._5.add(vehiculo1.posicion.x, vehiculo1.posicion.y) }
         })
+        cantComparendos = 0
         //luego cambia el estado a 0 para esperar una nueva pulsación de F5
         estadoSimulacion = 0
       }
@@ -450,7 +454,7 @@ object Simulacion extends Runnable {
         println("borrando anteriores")
         Conexion.borrarViajes()
         println("insertando")
-        Conexion.insertarViajes(viajes)
+        Conexion.insertarViajes(viajes,cantComparendos)
         print("Datos Guardados en Neo4j")
         System.exit(0);  //termina el programa
       }
@@ -460,9 +464,10 @@ object Simulacion extends Runnable {
       if (estadoSimulacion == 4) {
         println("comprobando que exista simulacion guardada en neo4j")
         //en este momento esta en false porque se  debe cuadrar todo antes de permitirlo
-        val datosCarga = Conexion.getViajes(vias)
+        val (datosCarga,cC) = Conexion.getViajes(vias)
         if (datosCarga.size>0) {
           println("si hay, cargando")
+          cantComparendos = cC
           vehiculos.clear()
           viajes.clear()
           viajes = datosCarga
