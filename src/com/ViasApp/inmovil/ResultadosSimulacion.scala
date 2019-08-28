@@ -4,7 +4,7 @@ import com.ViasApp.movimiento._
 import com.ViasApp.inmovil._
 import com.ViasApp.movil._
 
-class ResultadosSimulacion( val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: Array[Vehiculo],val  tiempo: Double, val interOrigen: ArrayBuffer[Interseccion], val interDestino: ArrayBuffer[Interseccion], val distancias:ArrayBuffer[Double]){
+class ResultadosSimulacion( val  arrayVias : Array[Via], val arrayIntersecciones : Array[Interseccion], val arrayVehiculos: ArrayBuffer[Vehiculo],val  tiempo: Double, val interOrigen: ArrayBuffer[Interseccion], val interDestino: ArrayBuffer[Interseccion], val distancias:ArrayBuffer[Double]){
   
   var aux1 = 0
   var aux2 = 0
@@ -41,11 +41,11 @@ class ResultadosSimulacion( val  arrayVias : Array[Via], val arrayIntersecciones
   
   var sinDestino = arrayIntersecciones.size - interDestino.distinct.size //Nodos sin vehiculos al finalizar
   
-  var velmaxveh = arrayVehiculos.map(_.velocidad.magnitud).max //Velocidad máxima de los vehiculos
+  var velmaxveh = arrayVehiculos.map(_.velocidadAuto).max //Velocidad máxima de los vehiculos
   
-  var velminveh = arrayVehiculos.map(_.velocidad.magnitud).min //Velocidad minima de los vehiculos
+  var velminveh = arrayVehiculos.map(_.velocidadAuto).min //Velocidad minima de los vehiculos
   
-  var velpromveh = arrayVehiculos.map(_.velocidad.magnitud).sum/arrayVehiculos.size  //Velocidad promedio de los vehiculos
+  var velpromveh = arrayVehiculos.map(_.velocidadAuto).sum/arrayVehiculos.size  //Velocidad promedio de los vehiculos
   
   var distanciaProm = distancias.sum/arrayVehiculos.size
   
@@ -53,4 +53,3 @@ class ResultadosSimulacion( val  arrayVias : Array[Via], val arrayIntersecciones
   
   var distanciaMin = distancias.min
   
-}
