@@ -42,7 +42,7 @@ class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo],tiemp
     }else{
       t=((-v+Math.sqrt(v*v+2*a*d))/a).toInt
     }
-   (tiempoSemaforo(id)<= t||t<=tiempoSemaforo(id)+ta+tiempoEnverde(id))//falta solo el tiempo en verde del semaforo
+   ((tiempoSemaforo(id)<= t)&&(t<=tiempoSemaforo(id)+ta+tiempoEnverde(id)))//falta solo el tiempo en verde del semaforo
     
   }
     
