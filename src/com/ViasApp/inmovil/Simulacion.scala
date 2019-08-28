@@ -347,7 +347,13 @@ object Simulacion extends Runnable {
           }
 
         } else {
-          if ((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y), 2) <= (vehiculo_actual.distanciaFrenado + rangoPermitido) * (vehiculo_actual.distanciaFrenado + rangoPermitido))) {
+          if (vehiculo_actual.velocidad.magnitud == vehiculo_actual.velocidadAuto) {
+            if ((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y), 2) <= (vehiculo_actual.distFrenadoEstatica + rangoPermitido) * (vehiculo_actual.distFrenadoEstatica + rangoPermitido))) {
+              vehiculo_actual.mover(dt, -1)
+            } else {
+              vehiculo_actual.mover(dt, 0)
+            }
+          }else if ((math.pow((vehiculo_actual.posicion.x - via_fin.x), 2) + math.pow((vehiculo_actual.posicion.y - via_fin.y), 2) <= (vehiculo_actual.distanciaFrenado + rangoPermitido) * (vehiculo_actual.distanciaFrenado + rangoPermitido))) {
             vehiculo_actual.mover(dt, -1)
           } else {
             vehiculo_actual.mover(dt, 0)
