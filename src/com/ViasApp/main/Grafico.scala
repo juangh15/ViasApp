@@ -23,6 +23,7 @@ import java.awt.event.KeyListener
 import org.jfree.util.ShapeUtilities
 import java.awt.geom.Rectangle2D
 import java.awt.geom.Ellipse2D
+import java.awt.Graphics2D
 
 class Grafico {
 
@@ -39,9 +40,17 @@ class Grafico {
     val conjunto_intersecciones = scalax.collection.mutable.ArraySet[Interseccion]()
     var cont: Int = 0
     //Recorre las vias para graficarlas
-
+    
+    val camaraserie = new XYSeries("camaras")
+    
     for (i <- vias) {
-      var viaserie = new XYSeries(cont)
+      if(i.camara.isDefined){
+        val puntoX = (i.origen.x+i.fin.x)/2
+        val puntoY = (i.origen.y+i.fin.y)/2
+        camaraserie.add(puntoX,puntoY)
+      }
+      val viaserie = new XYSeries(cont)
+      
 
       viaserie.add(i.origen.x, i.origen.y)
       viaserie.add(i.fin.x, i.fin.y)
@@ -53,9 +62,11 @@ class Grafico {
       dataset.addSeries(viaserie)
       cont += 1
     }
+    
+    
 
     conjunto_intersecciones.foreach(intersecccion_actual => {
-
+    
       //Añade textos en las posiciones iniciales
       val nuevo_texto = new XYTextAnnotation(intersecccion_actual.nombre.getOrElse("None"), intersecccion_actual.x, intersecccion_actual.y)
       if (intersecccion_actual.x % 9 == 0) {
@@ -77,7 +88,7 @@ class Grafico {
 
     //esto es para que el grafico reconozca las teclas presionadas
 
-    (dataset, renderer, vias.size - 1)
+    (dataset, renderer, camaraserie,vias.size - 1)
   }
 
   def graficarVehiculos(vehiculos: Array[Vehiculo], vias: Array[Via]): (XYSeries, XYSeries, XYSeries, XYSeries, XYSeries) = {
@@ -87,7 +98,7 @@ class Grafico {
     //val dataset: XYSeriesCollection = new XYSeriesCollection()
 
     val g = new Grafico
-    val (dataset, renderer, ultimo) = g.graficarVias(vias)
+    val (dataset, renderer, camaraserie,ultimo) = g.graficarVias(vias)
 
     //Series de los puntos de cada tipo de vehiculo
     val carros = new XYSeries("carros")
@@ -117,6 +128,7 @@ class Grafico {
     dataset.addSeries(motos)
     dataset.addSeries(camiones)
     dataset.addSeries(motoTaxis)
+    dataset.addSeries(camaraserie)
 
     //creando cada Jfreechart que contiene un plot y unas letricas(que borramos)
     val chart = ChartFactory.createScatterPlot(
@@ -132,7 +144,7 @@ class Grafico {
     //Estilos para todos que luego se especifican para los carritos
     renderer.setBaseLinesVisible(true)
     renderer.setBaseShapesVisible(false)
-    for (r <- 1 to 5) {
+    for (r <- 1 to 6) {
       renderer.setSeriesShapesVisible(ultimo + r, true)
       renderer.setSeriesLinesVisible(ultimo + r, false)
     }
@@ -152,6 +164,9 @@ class Grafico {
     //estilo mototaxi
     renderer.setSeriesShape(ultimo + 5, ShapeUtilities.createDownTriangle(4))
     renderer.setSeriesPaint(ultimo + 5, Color.getHSBColor(59, 83, 100))
+    //estilo camara
+    renderer.setSeriesShape(ultimo + 6, ShapeUtilities.createDiamond(4))
+    renderer.setSeriesPaint(ultimo + 6, Color.BLUE)
 
     plot.setBackgroundPaint(Color.WHITE) //color de fondo
     plot.getDomainAxis.setTickLabelsVisible(false) //desaparecen los numeros y rectas
