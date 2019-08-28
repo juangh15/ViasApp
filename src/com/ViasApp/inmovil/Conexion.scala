@@ -119,15 +119,17 @@ object Conexion {
     //borra los viajes antes de insertar nuevos
   def borrarViajes(){
     val (driver, session) = getSession()
+    val scriptC = "MATCH (n:Comparendo)\nDELETE (n)"
+    val resultC = session.run(scriptC)
     val script = "MATCH (N)-[:ENRUTADO]->(Ruta1)\nWHERE (N:Carro) or (N:Bus) or (N:Camion) or (N:Moto) or (N:MotoTaxi)\nDETACH DELETE (N), (Ruta1)"
     val result = session.run(script)
     session.close()
     driver.close()
   }
   //inserta los viajes 
-  def insertarViajes(viajes:ArrayBuffer[Viaje]){
+  def insertarViajes(viajes:ArrayBuffer[Viaje],c:Int){
     val (driver, session) = getSession()
-    var script:String = "CREATE "
+    var script:String = s"CREATE (:Comparendo{cantidad:$c}),"
     var cont = 0
     viajes.foreach(x =>{
       var cuentaVias:Int = 1
@@ -160,10 +162,13 @@ object Conexion {
   }
 
   //obtiene array de viajes Viaje(vehiculo, ruta)
-  def getViajes(vias: Array[Via]): ArrayBuffer[Viaje] = {
+  def getViajes(vias: Array[Via]): (ArrayBuffer[Viaje],Int) = {
     var viajes = ArrayBuffer.empty[Viaje]
     val (driver, session) = getSession()
     val script = s"MATCH (N)-[:ENRUTADO]->(Ruta1)\nWHERE (N:Carro) or (N:Bus) or (N:Camion) or (N:Moto) or (N:MotoTaxi)\nRETURN DISTINCT N, labels(N) as clase, Ruta1"
+    val scriptC = "MATCH (n:Comparendo)\nRETURN (n)"
+    val runC = session.run(scriptC)
+    val rC = if (runC.hasNext) runC.next.get(0).get("cantidad").asInt else 0
     val result = session.run(script)
     while (result.hasNext()) {
       val valores = result.next().values()
@@ -230,7 +235,7 @@ object Conexion {
     }
     session.close()
     driver.close()
-    viajes
+    (viajes,rC)
   }
   
   def getResultadosSimulacion():ResultadosParaSimulacion = {
