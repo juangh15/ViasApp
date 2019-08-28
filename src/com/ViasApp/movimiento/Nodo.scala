@@ -25,37 +25,34 @@ class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo], val 
     if(tiempo>=tiempoTotal){
       tiempo=tiempo-tiempoTotal
     }
-    
-    var sumatory:Int=semaforos(0).tv.toInt
+    var sumatory:Int=semaforos(0).tv
     var condicion =(tiempo<=sumatory)
     var cont=0
     var cosa=false
     while(!condicion){
       
-      if(cosa){
-        sumatory+=ta
-        cosa=false
-        cont+=1
-      }else{
-        sumatory+=semaforos(cont).tv.toInt
-        cosa=true
+      if(cosa){//si el semaforo en la posicion cont va para amarillo
+        sumatory+=ta//aqui le suma el tiempo amarillo
+        cosa=false//aqui quiere decir que va para verde el semaforo en la posicion cont+1
+        cont+=1//semaforo que sigue
+      }else{//si los semaforos están en verde
+        sumatory+=semaforos(cont).tv
+        cosa=true//esto quiere decir que sigue para amarillo
       }
-      condicion=(tiempo<=sumatory)      
+      condicion=(tiempo<=sumatory)
     }
     
-    if(cosa){
+    if(cosa){//si está en amarillo
       semaforos(cont).estado=1
-    }else{
-      semaforos(cont).estado=0
-      if(!(cont-1<0)){
+    }else{//si está en verde
+      semaforos(cont).estado=0//cambia el estado del semaforo en la posicion cont a 0
+      //aqui cambia el semaforo anterior
+      if(!(cont-1<0)){//esto verifica el cambio del anterior
         semaforos(cont-1).estado=2
       }else {
         semaforos(semaforos.length-1).estado=2
       }
       
     }
-    
-      
-  }
   
 }
