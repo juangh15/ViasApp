@@ -419,6 +419,7 @@ object Simulacion extends Runnable {
           println("todos llegaron")
           println("numero de comparendos:" +comparendos.size)
           estadoSimulacion = 0
+          val resultadosSim = new ResultadosSimulacion(vias, intersecciones, vehiculos, t, interOrigen, interDestino, distanciaRecorrida)
           //val Resultados = new ResultadosSimulacion(cantidadVehiculos, cantidadCarros, cantidadMotos, cantidadBuses, cantidadCamiones, cantidadMototaxis, vias, intersecciones, vehiculos.toArray, t)
           val guardarResultados = new ResultadosParaSimulacion(
             cantidadVehiculos,
@@ -426,8 +427,11 @@ object Simulacion extends Runnable {
             cantidadMotos,
             cantidadBuses,
             cantidadCamiones,
-            cantidadMototaxis, 50, 15, 10, 40, 60, 80, 422, 50, 46, 5, 3,
-            600, 50, 40, 80, 63, 523, 1540, 1250, 1, 2)
+            cantidadMototaxis, resultadosSim.vias, resultadosSim.intersecciones, resultadosSim.viasUnSentido, resultadosSim.viasDobleSentido, 
+            resultadosSim.velminvias, resultadosSim.velmaxvias , resultadosSim.longitudpromedio, resultadosSim.promedioOrigen, resultadosSim.promedioDestino, 
+            resultadosSim.sinOrigen, resultadosSim.sinDestino, resultadosSim.tiempo.toInt, 50, resultadosSim.velminveh.toInt, resultadosSim.velmaxveh.toInt, 
+            resultadosSim.velpromveh.toInt, resultadosSim.distanciaMin.toInt, resultadosSim.distanciaMax.toInt, resultadosSim.distanciaProm.toInt, 1, 2)
+
 
         }
 
