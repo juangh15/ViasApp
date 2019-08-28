@@ -435,7 +435,9 @@ object Simulacion extends Runnable {
       if (estadoSimulacion == 3) {
         println("guardando en neo4j")
         //aqui todos los de conexion
-
+        println("borrando anteriores")
+        Conexion.borrarViajes()
+        println("insertando")
         Conexion.insertarViajes(viajes)
         print("Datos Guardados en Neo4j")
         System.exit(0);  //termina el programa
