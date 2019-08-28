@@ -27,6 +27,14 @@ class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo],tiemp
     else tf=tiempoTotal-tiempo+ti
     tf
   }
+    val tiempoEnverde=(g:Long)=>{
+    var cont:Int=0;
+    var h:Int ={for (i <- 0 to semaforos.size-1)
+          if (semaforos.apply(i).id==g){cont = i}
+          cont
+            }
+    semaforos(cont)
+  }
   def sePuedePasar(v:Double, a:Double, d:Double = 0.0, id:Long): Boolean = {
     var t:Int=0
     if(a==0){
@@ -34,7 +42,7 @@ class Nodo(val posicion: Interseccion,val semaforos: ArrayBuffer[Semaforo],tiemp
     }else{
       t=((-v+Math.sqrt(v*v+2*a*d))/a).toInt
     }
-   (tiempoSemaforo(id)<= t||t<=tiempoSemaforo(id)+ta)//falta solo el tiempo en verde del semaforo
+   (tiempoSemaforo(id)<= t||t<=tiempoSemaforo(id)+ta+tiempoEnverde(id))//falta solo el tiempo en verde del semaforo
     
   }
     
